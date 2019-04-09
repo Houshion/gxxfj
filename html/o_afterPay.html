@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>支付结果</title>
+</head>
+<style type="text/css">
+    .mainS {
+        padding: 10px;
+        border-radius: 30px;
+        background: #2bb7e8;
+        color: #ffffff;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div class="afterPay pd-10">
+        <div class="bfff success result" style="display: block;">
+            <!-- <div class="title pd-20 mg-20 ta-center colmain border-b font20 fontb">支付成功！</div> <div class="ta-center pd-50"> <img src="../img/o_success.png" class="wd-50"> <div class="msg">您已成功充值<span>60</span>元</div> </div> <div class="mainS mg-t-20">知道了</div> -->
+        </div>
+        <div class="bfff fail result  hide" style="display: block;">
+            <!--  <div class="title pd-20 mg-20 ta-center colfail border-b font20 fontb">支付失败！</div> <div class="ta-center pd-50"> <img src="../img/o_fail.png" class="wd-50"> <div class="msg">您的余额不足</div> </div> <div class="mainbtn mg-t-20">知道了</div> </div> -->
+        </div>
+        <script src="../js/jquery-3.2.1.min.js"></script>
+        <script src="../js/o_base.js"></script>
+        <script src="../js/dlc.js"></script>
+        <script>
+            var dataUrl = [];
+            dataUrl.type = getParam().type;
+            dataUrl.payprice = getParam().money;
+            if (getParam().false == 1) { //支付失败 默认是支付成功
+                $('.fail').append(
+                    ' <div class="title pd-20 mg-20 ta-center colfail border-b font20 fontb">支付失败！</div> <div class="ta-center pd-50"> <img src="../img/o_fail.png" class="wd-50"> <div class="msg">您的余额不足</div> </div> <div class="mainbtn mg-t-20">知道了</div> </div>'
+                );
+            } else {
+                if (getParam().type == 1) {
+                    $('.success').append(
+                        '<div class="title pd-20 mg-20 ta-center colmain border-b font20 fontb">支付成功！</div> <div class="ta-center pd-50"> <img src="../img/o_success.png" class="wd-50"> <div class="msg">您已成功支付<span>' +
+                        (dataUrl.payprice == null ? '' : dataUrl.payprice + '元') +
+                        '</span></div> </div> <div class="mainS mg-t-20">知道了</div>'
+                    );
+                } else {
+                    $('.success').append(
+                        '<div class="title pd-20 mg-20 ta-center colmain border-b font20 fontb">充值成功！</div> <div class="ta-center pd-50"> <img src="../img/o_success.png" class="wd-50"> <div class="msg">您已成功充值<span>' +
+                        (dataUrl.payprice == null ? '' : dataUrl.payprice + '元') +
+                        '</span></div> </div> <div class="mainS mg-t-20">知道了</div>'
+                    );
+                }
+            }
+            $(".result").on("click", function () {
+                $(this).addClass("hide");
+                $(this).siblings(".result").removeClass("hide");
+
+            });
+            $('.mainS').on('click', function () { //支付成功
+                if (getParam().type == 1) { //支付
+                    setItem("return", 1);
+                    _href('o_indexDevice.html');
+                } else if (getParam().type == 2) { //充值
+                    _href('y_mdevice.html', dataUrl);
+                } else {
+
+                }
+            })
+            $(".mainbtn").click(function () { //支付失败
+                history.go(-1);
+            });
+        </script>
+</body>
+
+</html>

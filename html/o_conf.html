@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>配置</title>
+</head>
+<body class="font16">
+    <div id="deviceConfig">
+        <div class="pd-10">当前要配置的设备</div>
+        <div class="bfff colmain pd-10 name">智能新风机</div>
+    </div>
+    <div id="config">
+        <div class="pd-10">网络配置</div>
+        <div class="bfff flex pd-10 border-b wlan">
+            <div class="wd-30 flex border-r">
+                <img src="../img/o_wifi.png">
+                <div class="box mg-l-10 pd-r-10">WLAN</div>
+            </div>
+            <div class="pd-l-10 wd-70">
+                <input type="text" placeholder="WLAN">
+            </div>
+        </div>
+        <div class="bfff flex pd-10 pass">
+            <div class="wd-30 flex border-r">
+                <img src="../img/o_mima.png">
+                <div class="box mg-l-10 pd-r-10">密码</div>
+            </div>
+            <div class="pd-l-10 wd-60">
+                <input type="password" class="wd-80" />
+            </div>
+            <div class="wd-10 box see">
+                <img src="../img/o_eye.png" data-status="0" />
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script>
+        $(".see").on("click", "img", function () {
+            if($(this).data("status") == 0){
+                $(this).attr("src","../img/o_eye_p.png").data("status",1);
+                $(".pass input").attr("type","text")
+            }else{
+                $(this).attr("src","../img/o_eye.png").data("status",0);
+                $(".pass input").attr("type","password")
+            }
+            
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>智能新风机</title>
+</head>
+<body class="bfff">
+    <header class="flex fixed_top border-b bfff" id="h_index">
+        <div class="ta-center wd-33 border-r" onclick="Scan()">扫码使用</div>
+        <div class="ta-center wd-33 border-r" onclick="Booking()">预约使用</div>
+        <div class="ta-center wd-33" onclick="Return()">预约退还</div>
+    </header>
+    <section class="mg-t-40 mg-b-80" id="deviceList">
+        <div class="top">
+            <div class="flex flexWrap">
+                <div class="bimg box colfff pm25">
+                    <div>
+                        <div>PM2.5</div>
+                        <div class="ta-center font32 fontb">80</div>
+                        <div>μg/m³</div>
+                    </div>
+                </div>
+                <div class="bimg box colfff voc">
+                    <div>
+                        <div>VOC</div>
+                        <div class="ta-center font32 fontb">优</div>
+                        <div>PPM</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flexEnd ta-center">
+                <div class="wd">
+                    <div class="box">
+                        <img src="../img/o_wendu.png" class="wd-30">
+                        <span>温度</span>
+                    </div>
+                    <div class="ta-center col666">室内/<span class="colwd">25℃</span></div>
+                    <div class="ta-center col666">室外/<span class="colwd">30℃</span></div>
+                </div>
+                <div class="bimg box colfff co2">
+                    <div>
+                        <div>CO²</div>
+                        <div class="ta-center font32 fontb">800</div>
+                        <div>PPM</div>
+                    </div>
+                </div>
+                <div class="sd">
+                    <div class="box">
+                        <img src="../img/o_shidu.png" class="wd-30">
+                        <span>湿度</span>
+                    </div>
+                    <div class="ta-center col666">室内/<span class="colsd">78%</span></div>
+                    <div class="ta-center col666">室外/<span class="colsd">80%</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="middle mg-50">
+            <div class="ta-center col666 mg-10">设备未开启!</div>
+            <div class="btnNoBorder wd-70 mg-auto">开启设备</div>
+        </div>
+        <div class="bottom flex flexWrap border-t colc2">
+            <div class="pick wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbzd_p.png" class="wd-40" data-pic="../img/o_sbzd.png">
+                <div>自动</div>
+            </div>
+            <div class="wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbnxh.png" class="wd-40" data-pic="../img/o_sbnxh_p.png">
+                <div>内循环</div>
+            </div>
+            <div class="wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbsm.png" class="wd-40" data-pic="../img/o_sbsm_p.png">
+                <div>睡眠</div>
+            </div>
+            <div class="wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbsd.png" class="wd-40" data-pic="../img/o_sbsd_p.png">
+                <div>手动</div>
+            </div>
+            <div class="wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbzdy.png" class="wd-40" data-pic="../img/o_sbzdy_p.png">
+                <div>自定义</div>
+            </div>
+            <div class="wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbsj.png" class="wd-40" data-pic="../img/o_sbsj_p.png">
+                <div>杀菌</div>
+            </div>
+            <div class="wd-25 ta-center pd-t-10 serv">
+                <img src="../img/o_sbdfr.png" class="wd-40" data-pic="../img/o_sbdfr_p.png">
+                <div>电辅热</div>
+            </div>
+        </div>
+    </section>
+    <footer class="flex fixed_bottom border-t bfff" id="f_index">
+        <div class="ta-center wd-33 pd-5">
+            <img src="../img/o_fuwu.png" alt="">
+            <div class="colmain">在线服务</div>
+        </div>
+        <div class="ta-center wd-33 pd-5">
+            <img src="../img/o_goumai.png" alt="">
+            <div class="colmain">购物车</div>
+        </div>
+        <div class="ta-center wd-33 pd-5">
+            <img src="../img/o_geren.png" alt="">
+            <div class="colmain">个人中心</div>
+        </div>
+    </footer>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script>
+        $(function () {
+            $(".serv").on("click", function () {
+                if(!$(this).hasClass("pick")){
+                    $(this).addClass("pick");
+                }else{
+                    $(this).removeClass("pick");
+                }
+                var img = $(this).find("img");
+                var src = img.data("pic");
+                var pic = img.attr("src");
+
+                img.attr("src",src).data("pic",pic);
+            });
+
+            var open = true;
+            $(".btnNoBorder").on("click", function () {
+                if(open){
+                    $(this).text("关闭设备");
+                    $(this).siblings().text("设备已开启！");
+                }else{
+                    $(this).text("开启设备");
+                    $(this).siblings().text("设备已关闭！");
+                }
+                open = !open
+                
+            });
+        });
+        
+    </script>
+</body>
+</html>

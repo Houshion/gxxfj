@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>详情</title>
+    <style>
+    body {
+        background: #ffffff
+    }
+    </style>
+</head>
+
+<body>
+    <div class="pd-20">
+        <div id="TitleImg" class="wd-100">
+            <img src="" class="wd-100">
+        </div>
+        <div id="deviceMain">
+            <div class="font18 pd-t-10 pd-b-10 name">
+                <!-- 新蒂新风机 -->
+            </div>
+            <div class="col666 lh24 font15 content">
+                <!-- 1.新风机是一种有效的空气净化设备，能够使室内空气产生循环，一方面把室内污浊的空气排出室外，另一方面把室外新鲜的空气经过杀菌，消毒、过滤等措施后，再输入到室内，让房间里每时每刻都是新鲜干净的空气，新风机运用新风对流专利技术，通过自主送风何引风，使室内空气实现对流，从而最大程度化的进行室内空气置换，新风机内置多功能净化系统保证进入室内的空气洁净健康。新风机主要分为排风式新风机和送风式新风机两种类型，可以在绝大部分室内环境下安装，安装方便，使用舒适。新风机是家居生活的健康伴侣。 -->
+            </div>
+        </div>
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+</body>
+
+</html>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../js/o_base.js"></script>
+<script src="../js/dlc.js"></script>
+<script>
+var param = {
+    api_name: "desc",
+    token: getItem("token"),
+    id: getParam().id
+}
+
+ajaxPost(param, "app/FanMac/api", function(res) {
+    console.log(res);
+    if (res.code == 1) {
+        $("#TitleImg img").attr("src", res.data.img_desc);
+        $(".name").text(res.data.name);
+        $(".content").text(res.data.content);
+    }
+});
+</script>

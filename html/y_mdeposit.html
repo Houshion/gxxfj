@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        我的押金
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <link href="../css/weui.min.css" rel="stylesheet" />
+    <link href="../css/dropload.css" rel="stylesheet" />
+    <link href="../css/jquery-weui.css" rel="stylesheet" />
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <style type="text/css">
+        .banner {
+            color: #fff;
+            height: 9.725rem;
+            position: relative;
+            background: url(../img/y_banner2.png);
+            -webkit-background-size: 100%;
+            background-size: 100%;
+        }
+
+        .banner>p {
+            color: #fff;
+        }
+
+        .line {
+            width: 1px;
+            height: 2.0rem;
+            background: #e8e8e8;
+        }
+
+        .t {
+            width: 70%;
+            margin: 1.0rem auto;
+            line-height: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="bw">
+    <div class="banner flex flex-column">
+        <p class="f100 data">0.00</p>
+        <p>押金（元）</p>
+    </div>
+    <div class="mt40">
+        <p class="color1 t">亲！不退押金会不定期收到免费 使用的优惠券哟！</p>
+    </div>
+    <div class="main_btn" onclick="javascript:history.go(-1)">不退了</div>
+    <p class="mt40 tac col9 confirmBack">不想免费使用，退掉吧！</p>
+    <script type="text/javascript" src="../js/sweetalert2.all.min.js"></script>
+    <script type="text/javascript" src="../js/drop/dropload.min.js"></script>
+    <script type="text/javascript" src="../js/JForm.js"></script>
+    <script type="text/javascript" src="../js/dlc.js"></script>
+    <script type="text/javascript" src="../js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../js/city-picker.js"></script>
+    <script type="text/javascript" src="../js/h_common.js"></script>
+    <script type="text/javascript" src="../js/jquery.form.js"></script>
+</body>
+<script>
+    // 我的押金
+    dlc_request('app/user/api', {
+        api_name: 'depositBack',
+        token: user_token(),
+        id: getUrlParam('id'),
+        device_id: getUrlParam('device_id')
+    }, function (res) {
+        console.log(res);
+        if (res.code == 1) {
+            if(res.data < 0) res.data = 0;
+            $('.data').text(res.data);
+        } else {
+            dlctipbox.show(res.msg);
+        }
+    })
+    // 确认退还押金操作
+    $('.confirmBack').click(function () {
+        dlc_request('app/user/api', {
+            api_name: 'confirmBack',
+            token: user_token(),
+            id: getUrlParam('id'),
+            device_id: getUrlParam('device_id')
+        }, function (res) {
+            console.log(res);
+            if (res.code == 1) {
+                dlctipbox.show(res.msg);
+                setTimeout(() => {
+                    window.location.href = "./y_wallet.html";
+                }, 1500);
+            } else {
+                dlctipbox.show(res.msg);
+            }
+        })
+    })
+</script>
+
+</html>

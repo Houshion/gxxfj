@@ -1,0 +1,316 @@
+
+.wd-7 { width: 7%; }
+.mgtb-15 { margin: 15px 0; }
+.p-fixed {
+    position: fixed;
+}
+/**************** rage块 **********************/
+.count {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background: #f5f5f5;
+}
+.rage {
+    height: 20px;
+    background: #2bb7e8;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+.reducebtn {
+    margin-right: 3px;
+    border: 1px solid #2bb7e8;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+}
+.plusbtn {
+    margin-left: 3px;
+    border: 1px solid #2bb7e8;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+.rage1.wd-100 {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+/***************** 遮罩层 *******************/
+.mask {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+.maskBox {
+    position: fixed;
+    margin: auto;
+    left: 10%;
+    top: 20%;
+    z-index: 99;
+}
+/****************** 背景颜色 *****************/
+.bfff { background: #ffffff }
+.bmain { 
+    background: #2bb7e8;
+    color: #ffffff
+}
+.bcolf5 { background: #f5f5f5 }
+/********************** 字体颜色 *************************/
+.colmain { color: #2bb7e8 }
+.colbbb { color: #bbbbbb }
+.col666 { color: #666666 }
+.col999 { color: #999999 }
+.cole1 { color: #e1e1e1 }
+.colfail { color: #f99301 }
+.colfff { color: #ffffff }
+.colwd { color: #ed9260 }
+.colsd { color: #69d6ad }
+.colc2 { color: #c2c2c2 }
+/********************** 按钮 *******************/
+.mainbtn {
+    padding: 10px;
+    border-radius: 30px;
+    background: #2bb7e8;
+    color: #ffffff;
+    text-align: center;
+}
+.btnNoBorder {
+    padding: 10px;
+    border-radius: 30px;
+    color: #2bb7e8;
+    text-align: center;
+    border: 1px solid #2bb7e8;
+    font-weight: bold;
+}
+/********************** 输入框 *********************/
+.input {
+    width: 100%;
+    border: none;
+    padding: 15px 0;
+}
+
+/** o_index.html **/
+#h_index div{
+    margin: 10px 10px 10px 0
+}
+
+.deviceList li{
+    width: 40%;
+    padding: 3%;
+    margin: 0px 2% 10px;
+}
+
+#f_index img {
+    width: 25px;
+}
+
+/** o_cupons.html **/
+.stamp {
+    width: 85%;
+    margin: 10px auto;
+    padding: 0 10px;
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    background: radial-gradient(rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 5px, #ffffff 5px);
+    background-size: 15px 15px;
+    background-position: 9px 3px;
+}
+.stamp:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    z-index: -1;
+    background-color: #ffffff;
+}
+.stamp:after {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.5);
+    z-index: -2;
+}
+.stamp i{
+    position: absolute;
+    left: 20%;
+    top: 45px;
+    height: 190px;
+    width: 390px;
+    transform: rotate(-30deg);
+    background: rgba(125, 125, 125, 0.2);
+}
+.stamp .par{
+    float: left;
+    margin: 16px 10px;
+    padding: 0 10px;
+    text-align: left;
+    width: 40%;
+    max-width: 40%;
+}
+.stamp .par span{
+    font-size: 30px;
+    margin-right: 5px;
+}
+.stamp .par .sign{
+    font-size: 34px;
+}
+.stamp .par sub{
+    position: relative;
+    top: -5px;
+}
+.stamp .copy{
+    display: inline-block;
+    padding: 10px;
+    vertical-align: text-bottom;
+    font-size: 20px;
+}
+.stamp .copy div{
+    font-size: 13px;
+    margin-top: 8px;
+    color: #999;
+}
+/** o_redpack.html **/
+.redpackList .redpack{
+    width: 48%;
+    margin: 1%;
+}
+/** o_conf.html **/
+.wlan img, .pass img {
+    width: 30px;
+    height: 30px;
+}
+.wlan input, .pass input {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+/** o_indexDevice.html **/
+#h_index {
+    z-index: 99;
+}
+#deviceList ul {
+    width: auto!important;
+}
+.top .bimg {
+    width: 120px;
+    height: 120px;
+    margin: auto;
+    text-align: center
+} 
+.top .Bimg {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+    text-align: center
+} 
+.top .upimg {
+    width: 25px;
+}
+.top .Allunit{
+    margin: 0 10px;
+    padding: 15px 0;
+    color: #666666
+}
+.top .view{
+    /* padding: 40px; */
+    height: 45%
+}
+.top .view img{
+    width: 50%;
+}
+.pm25 {
+    background: url("../img/o_gsmall.png") no-repeat;
+    background-size: 100%
+}
+.voc {
+    background: url("../img/o_ysmall.png") no-repeat;
+    background-size: 100%
+}
+.co2 {
+    background: url("../img/o_bsmall.png") no-repeat;
+    background-size: 100%;
+    margin-top: -30px!important;
+}
+.ypm25 {
+    background: url("../img/o_ybig.png") no-repeat;
+    background-size: 100%;
+}
+.top .wd {
+    margin-left: 5%;
+}
+.top .sd {
+    margin-right: 5%;
+}
+.bottom .pick {
+    color: #2bb7e8
+}
+
+/** o_returnList.html **/
+#returnList .list {
+    height: 72px;
+}
+#returnList .list .img {
+    width: 60px;
+    height: 60px;
+}
+#returnList .list .fr {
+    height: 100%
+}
+.returnStatus.rArow:after {
+    border-color: #bbbbbb;
+}
+
+/** o_return.html **/
+#return .line .location img, #use .line .location img {
+    width: 18px;
+    height: 18px;
+}
+
+/** o_custom.html **/
+.mainbtn.add{
+    width: 90%;
+    margin: 40px 2.5%;
+}
+#start, #end {
+    text-align: center;
+}
+/** 修改jquery weui样式 **/
+.weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before {
+    color: #2bb7e8!important;
+}
+.weui-cell {
+    padding: 0!important;
+    font-size: 14px!important;
+}
+.weui-cells_checkbox .weui-icon-checked:before {
+    font-size: 16px!important;
+}
+/** 公共弹框样式 **/
+.borderBtn {
+    border: #2bb7e8 1px solid;
+    color: #2bb7e8;
+    border-radius: 30px;
+    text-align: center;
+    margin: 20px auto;
+    width: 70%;
+    padding: 10px;
+}
+
+.h60 { height: 60% }
+.h65 { height: 65% }
+.h55 { height: 55% }
+.h50 { height: 50% }
+.h45 { height: 45% }
+.h40 { height: 40% }
+.h35 { height: 35% }
+.h30 { height: 30% }
+.h25 { height: 25% }
+.h20 { height: 20% }

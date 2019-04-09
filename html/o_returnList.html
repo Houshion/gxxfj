@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>选择产品</title>
+</head>
+
+<body>
+    <div id="returnList" class="bfff">
+        <!-- <div class="list border-b pd-10">
+            <div class="fl border img pd-5">
+                <img src="../img/test1.png" class="wd-100">
+            </div>
+            <div class="fl">
+                <div class="mg-10 font16">新风机1</div>
+                <div class="mg-10 colbbb NO">S102331</div>
+            </div>
+            <div class="fr box">
+                <div class="returnStatus rArow mg-r-25 colbbb">
+                    未退还
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="list border-b pd-10">
+            <div class="fl border img pd-5">
+                <img src="../img/test2.png" class="wd-100">
+            </div>
+            <div class="fl">
+                <div class="mg-10 font16">新风机2</div>
+                <div class="mg-10 colbbb">S102332</div>
+            </div>
+            <div class="fr box">
+                <div class="returnStatus mg-r-25 colbbb">
+                    待退还
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="list border-b pd-10">
+            <div class="fl border img pd-5">
+                <img src="../img/test3.png" class="wd-100">
+            </div>
+            <div class="fl">
+                <div class="mg-10 font16">新风机3</div>
+                <div class="mg-10 colbbb">S102333</div>
+            </div>
+            <div class="fr box">
+                <div class="returnStatus mg-r-25 colbbb">
+                    待退还
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div> -->
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script>
+        $(function () {
+
+            // 加载数据
+            var param = {
+                api_name: "bespeakDevice",
+                page: 1,
+                pagesize: 20,
+                token: getItem("token"),
+            }
+
+            ajaxPost(param, "app/Bespeak/api", function (res) {
+                if (res.code == 1) {
+
+                    for (var i = 0; i < res.data.length; i++) {
+                        var status = (res.data[i].yajin_status == 1 ? "未退还" : res.data[i].yajin_status ==
+                            2 ? "待退还" : "");
+                        var rArow = (res.data[i].yajin_status == 1 ? "rArow" : '');
+                        if (res.data[i].yajin_status != 3) {
+                            $("#returnList").append(
+                                '<div class="list border-b pd-10" data-id="' + res.data[i].id +
+                                '">' +
+                                '<div class="fl border img pd-5">' +
+                                '<img src="' + res.data[i].device_pic + '" class="wd-100">' +
+                                '</div>' +
+                                '<div class="fl">' +
+                                '<div class="mg-10 font16">' + res.data[i].device_name +
+                                '</div>' +
+                                '<div class="mg-10 colbbb NO">' + res.data[i].device_number +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="fr box">' +
+                                '<div class="returnStatus ' + rArow + ' mg-r-25 colbbb">' +
+                                status +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="clear"></div>' +
+                                '</div>'
+                            )
+                        }
+                    }
+                } else {
+                    $('#returnList').html(emptyTip(res.msg));
+                    dlctipbox.show(res.msg)
+                }
+            });
+
+            $("#returnList").on("click", ".list", function () {
+                var Id = $(this).data("id")
+                var number = $(this).find(".NO").text();
+
+                setItem("returnId", Id);
+                goTo("./o_return.html", "num=" + number);
+            });
+        });
+    </script>
+</body>
+
+</html>

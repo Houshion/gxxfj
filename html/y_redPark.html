@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>我的红包</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,address=no" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <link href="../css/weui.min.css" rel="stylesheet" />
+    <style type="text/css">
+    .m {
+        width: 100%;
+        height: 13.475rem;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .ctime {
+        color: #999;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+    }
+
+    .font24 {
+        font-size: 1.5rem;
+    }
+    </style>
+
+    <body>
+        <div class="m flex-column">
+            <p class="ctime">2017-9-12</p>
+            <img src="../img/o_hongbao1.png" style="width:3.45rem;height:3.45rem;margin-top: 1.5rem;" />
+            <p class="tac mt50">红包金额</p>
+            <p class="mt20 color1 font24 money">￥0.00</p>
+        </div>
+        <!-- <div class="main_btn" style="margin-top:2.5rem;">提现</div> -->
+    </body>
+
+</html>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-weui.min.js"></script>
+<script src="../js/dlc.js"></script>
+<script>
+$('.ctime').text(getUrlParam('ctime'));
+$('.money').text('￥' + (getUrlParam('money')==''?'0.00':getUrlParam('money')));
+// dlc_request('app/user/api', { api_name: 'myRedpacket_xq', token: user_token(), id: getUrlParam('id') }, function(res) {
+//     console.log(res);
+//     if (res.code == 1) {
+
+//     } else {
+//         dlctipbox.show(res.msg)
+//     }
+// })
+</script>

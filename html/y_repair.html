@@ -1,0 +1,209 @@
+  <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        故障申报
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <link href="../css/sweetalert2.min.css" rel="stylesheet" />
+    <link href="../css/jquery-weui.css" rel="stylesheet" />
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <style type="text/css">
+    ul>li {
+        width: 100%;
+        height: 2.5rem;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    input,
+    textarea {
+        font-size: 16px;
+    }
+
+    input {
+        text-align: right
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #999;
+    }
+    /*上传图片*/
+
+    .pic {
+        padding: 0 5%;
+        width: 90%;
+        background: #fff;
+    }
+
+    .pic .tit {
+        margin-bottom: 10px;
+    }
+
+    .pic .tit span {
+        color: #999;
+    }
+
+    #pic_box {
+        width: 100%;
+    }
+
+    .comment-photo label {
+        display: inline-block;
+        width: 3.8rem;
+        height: 3.8rem;
+        background: url(../img/uploadImg.png) no-repeat;
+        background-size: 100% 100%;
+        float: left;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .main_btn {
+        width: 90%;
+        height: 50px;
+        margin: 0.7rem auto 0;
+        display: flex;
+        color: #fff;
+        border-radius: 50px;
+        align-items: center;
+        justify-content: center;
+        background: #2bb7e8;
+    }
+    /*meui.css*/
+    /*.toolbar .title,.weui-picker-modal .picker-items{font-size: .28rem;}*/
+    </style>
+</head>
+
+<body>
+    <div class="bigBox">
+        <ul class="container">
+            <form action="" enctype="multipart/form-data" method="post" name="form" id="form" onsubmit="return formSubmit()">
+                <input type="hidden" name="api_name" value="fault" />
+                <input type="hidden" name="token" id="token" />
+                <ul class="bw">
+                    <li class="bw flex-sb">
+                        <em>设备型号</em>
+                        <input type="text" name="device_number" id="device_number" placeholder="请输入" tip-text="设备型号" required/>
+                    </li>
+                    <li class="bw flex-sb">
+                        <em>预约时间</em>
+                        <input type="text" id='datetime-picker' name="create" placeholder="请输入" tip-text="预约时间" required/>
+                    </li>
+                    <li class="bw flex-sb">
+                        <em>联系人</em>
+                        <input type="text" name="contacts" placeholder="请输入" tip-text="联系人" required/>
+                    </li>
+                    <li class="bw flex-sb">
+                        <em>联系方式</em>
+                        <input type="text" name="phone" tip-text="联系方式" dtype="mobile" placeholder="请输入" maxlength="11" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" required/>
+                    </li>
+                    <li class="bw flex-column tas w100" style="height: auto;">
+                        <em class="w100 mt10">故障内容</em>
+                        <textarea class="w100 mt20" name="content" rows="10" cols="20" placeholder="请输入" tip-text="故障内容" required></textarea>
+                    </li>
+                    <!-- 上传图片 -->
+                    <div class="bw flex bdb" style="margin:0.5rem 0">
+                        <form class="bw">
+                            <div class="pic">
+                                <div class="comment-photo">
+                                    <div class="pic_box" id="pic_box" style="padding: .2rem;">
+                                        <label class="a-upload dib" style="position: relative;">
+                                            <input type="file" name="pictures[]" class="upLoadImg" tip-text="图片" onchange="upLoadImg(this,'pic_box',6)" accept="image/*" capture="camera" multiple hidden/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </ul>
+                <!-- 提交 -->
+                <button class="main_btn" onclick="formSubmitSelf(this,'form','App/Online/api/','y_repair.html')">提交</button>
+            </form>
+        </ul>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="../js/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="../js/dlc.js"></script>
+<script type="text/javascript" src="../js/JForm.js"></script>
+<script type="text/javascript" src="../js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/city-picker.js"></script>
+<script type="text/javascript">
+
+	//解决上传图片时capture="camera"在安卓与IOS的兼容性问题（在IOS只能拍照，不能选相册）
+	var ua = navigator.userAgent.toLowerCase();//获取浏览器的userAgent,并转化为小写——注：userAgent是用户可以修改的
+	var isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);//判断是否是苹果手机，是则是true
+	if (isIos) {
+		$("input:file").removeAttr("capture");
+	};
+
+// 时间插件
+$("#datetime-picker").datetimePicker();
+$('#token').attr('value', user_token());
+var onOff = 0;
+
+function formSubmitSelf(obj, formId, url, url2) {
+    $('#' + formId).ajaxSubmit({
+        type: 'post',
+        url: dlcUrl() + url,
+        dataType: 'json',
+        beforeSubmit: function() {
+            if (!checkForm(obj, formId)) {
+                return false;
+            }
+            swal({
+                background: 'transparent',
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            })
+        },
+        success: function(res) {
+            swal({
+                showConfirmButton: false,
+                background: 'transparent',
+                timer: 5,
+                onClose: function() {
+                    swal.hideLoading()
+                }
+            })
+            $(obj).removeAttr('disabled');
+            if (res.code == 1) {
+                // swal({ type: 'success', title: res.msg, showConfirmButton: false, timer: 3000 }).catch(function(e) { console.log(e) });
+                dlctipbox.show('申报成功');
+                if (url2 && url2 !== '') {
+                    setTimeout(function() {
+                        window.location.href = url2;
+                    }, 3000);
+                }
+            } else {
+                dlctipbox.show(res.msg);
+                // swal({ type: 'error', title: res.msg, showConfirmButton: false, timer: 2000 }).catch(function(e) { console.log(e) });
+            }
+        },
+        error: function(res) {
+            dlctipbox.show(res.msg);
+            // swal({ type: 'error', title: res.msg, showConfirmButton: false, timer: 2000 }).catch(function(e) { console.log(e) });
+            console.log('网络异常,请刷新');
+        }
+    })
+}
+</script>

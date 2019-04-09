@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        更换滤芯
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <link href="../css/sweetalert2.min.css" rel="stylesheet" />
+    <link href="../css/jquery-weui.css" rel="stylesheet" />
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script>
+    window['adaptive'].desinWidth = 750;
+    window['adaptive'].baseFont = 28;
+    window['adaptive'].init();
+    </script>
+    <style type="text/css">
+    ul>li {
+        width: 100%;
+        padding: .3rem;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    input {
+        text-align: end;
+    }
+
+    .main_btn {
+        margin-top: 2.25rem;
+        font-size: .36rem;
+    }
+    </style>
+</head>
+
+<body>
+    <form action="" enctype="multipart/form-data" method="post" name="form" id="form" onsubmit="return formSubmit()">
+        <input type="hidden" name="api_name" value="replace" />
+        <input type="hidden" name="token" id="token" />
+        <input type="hidden" name="id" id="id" />
+        <ul class="bw bdb">
+            <li class="bw flex-sb">
+                <em>设备号</em>
+                <input type="text" name="device_number" id="device_number" tip-text="设备号" placeholder="请输入" required/>
+            </li>
+            <li class="bw flex-sb">
+                <em>联系人姓名</em>
+                <input type="text" id='name' name="name" tip-text="联系人姓名" placeholder="请输入" required/>
+            </li>
+            <li class="bw flex-sb">
+                <em>联系人方式</em>
+                <input type="number" id='phone' name="phone" tip-text="联系方式" dtype="mobile" placeholder="请输入" maxlength="11" required/>
+            </li>
+            <li class="bw flex-sb">
+                <em>滤芯编号</em>
+                <input type="text" id='number' name="number" tip-text="滤芯编号" placeholder="请输入" required/>
+            </li>
+        </ul>
+        <button class="main_btn" onclick="formSubmit(this,'form','App/FanMac/api/','y_state.html')">确定</button>
+    </form>
+</body>
+
+</html>
+<script type="text/javascript" src="../js/dlc.js"></script>
+<script type="text/javascript" src="../js/JForm.js"></script>
+<script type="text/javascript" src="../js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/city-picker.js"></script>
+<script type="text/javascript" src="../js/sweetalert2.all.min.js"></script>
+<script type="text/javascript">
+$('#token').attr('value', user_token());
+$('#id').attr('value', getUrlParam('id'));
+$('#device_number').attr('value', getUrlParam('number'));
+var onOff = 0;
+$(function() {
+    $('.confirm').on('click', function() {
+        $.toast("操作成功");
+        setTimeout(function() {
+            $('#form').submit();
+        }, 2000)
+    })
+
+})
+// 表单验证
+function checkForm(obj, fromId, filter) {
+    var __options = { formId: fromId };
+    var __form = new JForm(__options);
+    if (!__form.checkFormData()) {
+        return false;
+    }
+    if (obj && obj !== '') {
+        $(obj).attr('disabled', 'disabled');
+    }
+    return true;
+}
+// 表单提交
+function formSubmit(obj, formId, url, url2) {
+    $('#' + formId).ajaxSubmit({
+        type: 'get',
+        url: dlcUrl() + url,
+        dataType: 'json',
+        beforeSubmit: function() {
+            if (!checkForm(obj, formId)) {
+                return false;
+            }
+            swal({
+                background: 'transparent',
+                onOpen: function() {
+                    swal.showLoading()
+                }
+            }).catch(function(e) { console.log(e) })
+        },
+        success: function(res) {
+            swal({
+                showConfirmButton: false,
+                background: 'transparent',
+                onClose: function() {
+                    swal.hideLoading()
+                }
+            })
+            $(obj).removeAttr('disabled');
+            if (res.code == 1) {
+                swal({ type: 'success', title: '滤芯更换成功，请手动开启设备' });
+                if (url2 && url !== '') {
+                    setTimeout(function() {
+                        window.location.href = url2;
+                    }, 2000);
+                }
+            } else {
+                alert(res.msg);
+            }
+        },
+        error: function(res) {
+            console.log('网络异常,请刷新');
+        }
+    })
+}
+</script>

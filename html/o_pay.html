@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/jquery-weui.css">
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>使用支付</title>
+    <style>
+    input[type='radio'] {
+        display: none;
+    }
+
+    .bigBox {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        flex: 1;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        overflow-scrolling: touch;
+    }
+
+    .smImg .img {
+        width: 20px;
+        height: 20px
+    }
+
+    .listTitle {
+        color: #999999
+    }
+
+    input {
+        background: none;
+    }
+
+    .hotelStatus .on {
+        background: #E08B6F;
+        color: #fff;
+    }
+
+    .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    input[name="hotel"]:checked+span {
+        width: 100%;
+        height: 100%;
+        background: #E08B6F;
+        color: #fff;
+    }
+
+    .hide_list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 40px;
+        background: #fff;
+    }
+
+    .b1 {
+        width: 80px;
+        height: 30px;
+        border-radius: 50px;
+    }
+
+    .reset {
+        border: 1px solid #ccc;
+    }
+
+    .msk {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+    }
+
+    .payM {
+        background: #2bb7e8;
+        color: #fff;
+    }
+
+    .imgr {
+        width: 20px;
+        height: 20px;
+        padding-right: 10px;
+    }
+
+    .col9 {
+        color: #999;
+    }
+
+    .color2 {
+        color: #2bb7e8;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="Pay bigBox">
+        <ul class="container">
+            <div class="bfff mg-b-10">
+                <div class="pd-10 border-b list flex flexBetween">
+                    <div class="wd-35">使用环境</div>
+                    <div class="col666 ambient"></div>
+                </div>
+                <div class="list hotelStatus" style="display: block;">
+                    <!--  <label class="flex-center w100 ">
+                        <input type="radio" name="hotel" checked="checked"> <span class="tac w100 flex-center pd-10" data-group_id="46" data-id="7">￥30元/1小时</span></label>
+                    <label class="flex-center w100 ">
+                        <input type="radio" name="hotel"> <span class="tac w100 flex-center pd-10" data-group_id="46" data-id="9">￥60元/2小时</span></label> -->
+                </div>
+                <div class="pd-10 border-b list flex flexBetween">
+                    <div class="wd-35">单价</div>
+                    <div class="col666">
+                        <input type="text" class="borderNone ta-right  unitprice" placeholder="请输入" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onblur="countMoney()" />
+                    </div>
+                </div>
+                <div class="pd-10 border-b list flex flexBetween hide">
+                    <div class="wd-35">押金</div>
+                    <div class="col666">
+                        <input type="text" class="borderNone ta-right  deposit" placeholder="请输入" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onblur="countMoney()" disabled/>
+                    </div>
+                </div>
+                <div class="pd-10 border-b list flex flexBetween">
+                    <div class="wd-35">使用<span class="unit"></span>数</div>
+                    <input type="text" class="borderNone ta-right number" value="1" placeholder="请输入" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onblur="countMoney()" />
+                </div>
+                <div class="pd-10 border-b list flex flexBetween">
+                    <div class="wd-35">合计费用</div>
+                    <div>
+                        <input type="text" class="borderNone ta-right colfail countPay" placeholder="请输入" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" onblur="countMoney()" />
+                    </div>
+                </div>
+            </div>
+            <div class="bfff mg-b-10 smImg">
+                <div class="pd-10 border-b listTitle">支付方式</div>
+                <div class="pd-10 border-b list flex flexBetween">
+                    <div class="wd-35 flex">
+                        <div class="img mg-r-10">
+                            <img src="../img/o_wxpay.png" class="img">
+                        </div>
+                        <div>微信支付</div>
+                    </div>
+                    <img src="../img/o_checked.png" class="img">
+                </div>
+            </div>
+            <div class="bfff mg-b-10">
+                <div class="pd-10 border-b listTitle">选择优惠方式</div>
+                <div class="pd-10 border-b list flex flexBetween coupon_btn">
+                    <div class="wd-35">我的优惠券</div>
+                    <div class="col666 coupon rArow mg-r-25">1张</div>
+                </div>
+                <div class="pd-10 border-b list flex flexBetween redpack_btn">
+                    <div class="wd-35">我的红包</div>
+                    <div class="col666 redPacket rArow mg-r-25">1个</div>
+                </div>
+            </div>
+            <div class="mainbtn mg-t-20 mg-l-20 mg-r-20">支付</div>
+            <a class="bfff mg-b-10 flex-center pd-10 pay_xieyi" style="display: none;" href="y_xieyi.html"><img src="../img/o_checked.png" class="imgr">
+                <span class="col9">使用前是否同意</span>
+                <span class="color2">《支付协议》</span>
+            </a>
+        </ul>
+        <div class="mask" style="display: none;"></div>
+        <div class="hoverBox" style="width: 100%;height:100%;z-index: 100;display: none;">
+            <div style="margin:30px;">
+                <div class="title h100 flex-center" style="color: #fff;line-height: 40px;background: #2BB7E8;">确认信息</div>
+                <ul>
+                    <li class="hide_list">
+                        <span class="mg-l-20">设备型号</span>
+                        <span class="mg-r-20 macno"></span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20 ">单价</span>
+                        <span class="mg-r-20 unitprice"></span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20 ">使用时间</span>
+                        <span class="mg-r-20 time"></span>
+                    </li>
+                    <li class="hide_list cdepositBox hide" style="display: none;">
+                        <span class="mg-l-20 ">押金</span>
+                        <span class="mg-r-20 cdeposit"></span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20 ">支付方式</span>
+                        <span class="mg-r-20 ">微信</span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20">支付总额</span>
+                        <span class="mg-r-20 money"></span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20">红包的金额</span>
+                        <span class="mg-r-20 redpackMoney"></span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20">优惠券的金额</span>
+                        <span class="mg-r-20 countMoney"></span>
+                    </li>
+                    <li class="hide_list">
+                        <span class="mg-l-20">应支付的金额</span>
+                        <span class="mg-r-20 payprice"></span>
+                    </li>
+                    <li class="hide_list" style="justify-content: space-around;padding-bottom: 10px;">
+                        <a class="b1 reset flex-center">取消</a>
+                        <a class="b1 payM flex-center">支付</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script src="../js/jquery-3.2.1.min.js"></script>
+        <script src="../js/jquery-weui.min.js"></script>
+        <script src="../js/o_base.js"></script>
+        <script src="../js/dlc.js"></script>
+        <script>
+        var couponMoney = 0,
+            redpackMoney = 0,
+            param = {
+                api_name: "getDetail",
+                token: getItem("token"),
+            },
+            payData = {
+                "couponId": 0,
+                "couponMoney": 0,
+                "redpackId": 0,
+                "redpackMoney": 0,
+                "deposit": 0,
+                "price": 0,
+                "money": 0,
+            },
+            dataUrl = {};
+        payData.type = getParam().type;
+        payData.id = getParam().id;
+        payData.macno = getParam().macno;
+        if (getParam().type == 1) { //设备支付信息获取
+            $('.pay_xieyi').show();
+            param.macno = getParam().macno;
+            ajaxPost(param, "app/FanMac/api", function(res) {
+                if (res.code == 1) {
+                    getCode(res);
+                } else {
+                    dlctipbox.show(res.msg);
+                    setTimeout(function() {
+                        history.go(-1)
+                    }, 1500)
+                }
+            });
+        } else if (getParam().type == 2) { //充值信息获取
+            $('title').text('在线激活');
+            param.api_name = "recharge",
+                param.id = getParam().id;
+            ajaxPost(param, "app/FanMac/api", function(res) {
+                if (res.code == 1) {
+                    console.log(res);
+                    getCode(res);
+                } else {
+                    dlctipbox.show(res.msg)
+                }
+            });
+        }
+
+        function getCode(res) {
+            var dataUrl = res.data;
+            var sum = 0;
+            if (sum < 0) sum = 0;
+            if (getParam().type == 1) { //判断模式
+                payData.status = res.data.status;
+            } else {
+                payData.status = res.data.type;
+            }
+            payData.coupon = res.data.coupon;
+            payData.redPacket = res.data.redPacket;
+            $(".ambient").text(res.data.ambient); //使用环境
+            $(".coupon").text(res.data.coupon + "张"); //优惠券
+            $(".redPacket").text(res.data.redPacket + "个"); //押金
+            $(".unit").text(res.data.unit);
+            if (payData.status == 4) { //酒店模式的时候
+                var arr = [];
+                $(".ambient").parents(".list").css('display', 'flex'); //支付情况下显示使用环境
+                $('.hotelStatus').css('display', 'block');
+                $('.unitprice').parents('.list').hide();
+                $(".number").parents('.list').hide();
+                var a = res.data.rate;
+                $('.countPay').val("￥ " + a[0].price);
+                for (i in a) {
+                    $('.hotelStatus').append('<label class="flex-center w100">' +
+                        '<input type="radio" hidden data-price=' + a[i].price + ' data-unit=' + a[i].unit + ' name="hotel"/>' +
+                        ' <span class="tac w100 flex-center pd-10">￥' + a[i].price + '元/' + a[i].unit + res.data.unit + '</span></label>')
+                }
+                $('input[name="hotel"]').eq(0).attr('checked', true); //第一个默认选中
+                payData.price =( a[0].price / a[0].unit).toFixed(2); //单价
+                payData.money = a[0].price; //总额
+                payData.time = a[0].unit; //使用时间
+                payData.unit = res.data.unit; //单位
+                //酒店模式的选择菜单
+                $("input[name=hotel]").on('change', function() {
+                    var price = $(this).data('price');
+                    var num = $(this).data('unit');
+                    $(".countPay").val("￥ " + price);
+                    payData.price = price / num; //单价
+                    payData.time = num; //使用时间
+                    payData.money = price; //支付总额
+                    countMoney();
+                });
+            } else {
+                //回写信息
+                $(".unitprice").val("￥ " + (res.data.unitprice * 1).toFixed(2) + ("/" + res.data.unit)); //单价
+                payData.price = res.data.unitprice;
+                payData.unit = res.data.unit;
+                if (res.data.deposit != undefined) { //押金
+                    $(".deposit").val("￥ " + (res.data.deposit * 1).toFixed(2));
+                    payData.deposit = res.data.deposit;
+                } else {
+                    payData.deposit = 0;
+                }
+                if (payData.status == 1) $(".ambient").parents(".list").css('display', 'flex'); //支付情况下显示使用环境
+                if (getParam().type == 1) {
+                    if (payData.status == 1) $(".deposit").parents(".list").css('display', 'flex'); //共享模式下显示押金
+                    if (payData.status == 1) $(".cdepositBox").css('display', 'flex').find('.cdeposit').text("￥" + payData.deposit);
+                }
+            }
+            countMoney(); //计算金额
+        }
+        //确认支付
+        var onOff = 0;
+        var total_money;
+        $(".Pay").on('click', '.mainbtn', function() { //显示支付框
+            if((getParam().redpackMoney > 0) && (Number(getParam().redpackMoney) > Number(payData.money))){
+                dlctipbox.show('红包金额不能大于支付金额');
+            }else{
+                $('.mask').show();
+                $('.hoverBox').show();
+                $('.macno').text(payData.macno);
+                $('.unitprice').text("￥" + payData.price);
+                payData.status == 4 ? $('.time').text(payData.time + payData.unit) : $('.time').text($('.number').val() + payData.unit);
+                $('.money').text("￥" + payData.money); //总额
+                $('.countMoney').text("￥" + payData.couponMoney); //优惠券金额
+                $('.redpackMoney').text("￥" + payData.redpackMoney); //红包金额      
+                $('.payprice').text("￥" + $('.countPay').val().split('￥')[1] * 1); //应付金额
+            }
+        });
+        $('.reset').on("click", function() {
+            $('.mask').hide();
+            $('.hoverBox').hide();
+        })
+        $(".Pay").on('click', '.payM', function(e) { //调用充值和支付
+        		if (onOff) return false;
+	            onOff = 1;
+	            rechargePay();
+        });
+        $('.mask').on('click', function(e) {
+            $(this).hide();
+        })
+        var payS = {};
+
+        function rechargePay() { //调用支付充值的接口
+            countMoney();
+            var money = $('.payprice').text().split('￥')[1] * 1;
+            payS.money = money;
+            if (getParam().type == 1) {
+                payS.type = 1;
+                var param = { //支付
+                    api_name: 'order',
+                    token: getItem("token"),
+                    macno: payData.macno,
+                    totalprice: payData.money,
+                    payprice: $('.payprice').text().split('￥')[1] * 1,
+                    pay_type: 'wxpay',
+                    redPacket_id: payData.redpackId,
+                    coupon_id: payData.couponId,
+                    unit: payData.time
+                }
+            } else { //充值
+                payS.type = 2;
+                payS.money = payData.money
+                var param = {
+                    api_name: 'rechargePay',
+                    token: getItem("token"),
+                    macno: payData.macno,
+                    money: payData.money,
+                    payprice: $('.countPay').val().split('￥')[1] * 1,
+                    pay_type: 'wxpay',
+                    redPacket_id: payData.redpackId,
+                    coupon_id: payData.couponId,
+                    unit: payData.time
+                }
+            }
+            ajaxPost(param, "app/FanMac/api", function(res) { //充值&&支付
+                console.log(res);
+                onOff = 1;
+                if (res.code == 1) {
+                    jsApiParameters = res.package;
+                    if (money == 0) {
+                        dlctipbox.show('支付成功');
+                        _href('o_afterPay.html', payS);
+                    } else {
+                        callpay();
+                    }
+                } else {
+                    dlctipbox.show(res.msg);
+                    onOff = 0;
+                }
+            });
+        }
+        //我的优惠券点击跳转
+        $('.Pay').on('click', '.coupon_btn', function() {
+            payData.s = 2;
+            countMoney();
+            _href('o_cupons.html', payData);
+        })
+        //我的红包点击跳转
+        $('.Pay').on('click', '.redpack_btn', function() {
+            payData.s = 2;
+            countMoney();
+            _href('o_redpack.html', payData);
+        })
+
+        function countMoney() { //计算金额的方法
+            if (getParam().couponMoney != undefined) { //如果优惠券有返回值的情况
+                payData.couponMoney = getParam().couponMoney;
+                payData.couponId = getParam().couponId;
+                $(".coupon").text('￥' + (getParam().couponMoney * 1).toFixed(2)); //优惠券数量
+            } else {
+                $(".coupon").text(payData.coupon + "张"); //优惠券数量
+            }
+            if (getParam().redpackMoney != undefined) { //如果红包有返回值的情况
+                payData.redpackMoney = getParam().redpackMoney;
+                payData.redpackId = getParam().redpackId;
+                $(".redPacket").text('￥' + (getParam().redpackMoney * 1).toFixed(2)); //红包数量
+            } else {
+                $(".redPacket").text(payData.redPacket + "个"); //红包数量
+            }
+            if (payData.status != 4) {
+                // payData.price = $('.unitprice').val().split('￥')[1] * 1;
+                payData.time = $('.number').val();
+                var sum = payData.price * payData.time - payData.couponMoney * 1 - payData.redpackMoney * 1;
+                if (sum < 0) sum = 0;
+                getParam().type == 1 ? payData.payprice = sum + payData.deposit * 1 : payData.payprice = sum; //共享模式押金不能抵扣
+                // payData.payprice = payData.price * payData.time + payData.deposit * 1 - payData.couponMoney * 1 - payData.redpackMoney * 1;
+                payData.money = payData.price * payData.time + payData.deposit * 1;
+                $('.countPay').val("￥" + payData.payprice.toFixed(2));
+            } else {
+                var sum = payData.money - payData.couponMoney - payData.redpackMoney;
+                if (sum < 0) sum = 0;
+                $('.countPay').val("￥" + sum.toFixed(2));
+            }
+
+        }
+
+        //提交支付信息
+        var jsApiParameters = {};
+        //调用微信JS api 支付
+        function jsApiCall() {
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',
+                jsApiParameters, //提交的支付信息
+                function(res) {
+                    console.log(res)
+                    WeixinJSBridge.log(res.err_msg);
+                    if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                        dlctipbox.show('支付成功');
+                        setItem("payStatus ", true);
+                        _href('o_afterPay.html', payS);
+                    } else {
+                        dlctipbox.show("支付失败 ")
+                        payS.false = 1;
+                        setItem("payStatus ", false)
+                        _href('o_afterPay.html?false=1', payS);
+                    }
+                }
+            );
+        }
+        //调用微信 支付
+        function callpay() {
+            if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+                }
+            } else {
+                jsApiCall();
+            }
+        }
+        </script>
+</body>
+
+</html>

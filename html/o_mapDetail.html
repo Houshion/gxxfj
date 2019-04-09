@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <title>详情</title>
+</head>
+
+<body>
+    <div class="list">
+        <div class="pd-10 bfff">
+            <div class="flex pd-l-20 pd-r-20">
+                <div class="font16 name"></div>
+                <div class="mg-l-10 mobile">
+                    <a tel=""></a>
+                </div>
+                <div>
+                    <img src="../img/o_phone.png" class="wd-50">
+                </div>
+            </div>
+            <div class="ta-left navigation" data-type="detail">
+                <img src="../img/o_location1.png" class="wd-5">
+                <span class="col666 address"></span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../js/dlc.js"></script>
+<script src="../js/o_base.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="http://map.qq.com/api/js?v=2.exp&key=WXocean"></script>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+<script>
+    $(function () {
+        if (getParam().type) {
+            var param = {
+                api_name: "bespeak_shop",
+                latitude: getItem("centerLat"),
+                longitude: getItem("centerLng"),
+                token: getItem("token"),
+                page: 1,
+                pagesize: 50,
+            }
+            if (getParam().type == "return") {
+                param.api_name = "bespeak_backlist";
+            }
+
+            $(".list").empty();
+
+            $.showLoading();
+
+            ajaxPost(param, "app/Bespeak/api", function (res) {
+
+                $.hideLoading();
+
+                if (res.code == 1) {
+                    for (var i = 0; i < res.data.shop.length; i++) {
+                        var message = res.data.shop;
+                        $(".list").append(
+                            '<div class="pd-10 bfff border-b">' +
+                            '<div class="flex pd-l-20 pd-r-20">' +
+                            '<div class="font16 name">' + message[i].name + '</div>' +
+                            '<div class="mg-l-10 mobile">' +
+                            '<a tel="' + message[i].mobile + '">' + message[i].mobile + '</a>' +
+                            '</div>' +
+                            '<div>' +
+                            '<img src="../img/o_phone.png" class="wd-50">' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="ta-left navigation" data-name="' + message[i].address +
+                            '" data-lat="' + message[i].lat + '" data-lng ="' + message[i].lng +
+                            '">' +
+                            '<img src="../img/o_location1.png" class="wd-5">' +
+                            '<span class="col666 address">' + message[i].address + '</span>' +
+                            '</div>' +
+                            '</div>'
+                        );
+                    }
+                } else {
+                    $('#returnList').html(emptyTip(res.msg));
+                    dlctipbox.show(res.msg,'','','999')
+                }
+            });
+
+            $(".list").on("click", ".navigation", function () {
+
+                var name = $(this).data("name");
+                var lat = $(this).data("lat");
+                var lng = $(this).data("lng");
+
+                location.href = "http://apis.map.qq.com/tools/routeplan/eword=" + name +
+                    "&epointx=" + lng + "&epointy=" + lat +
+                    "?referer=myapp&key=4LYBZ-CHBRG-TIMQ3-I3N32-2LJ4K-FZBTY"
+            })
+
+        } else {
+            var message = JSON.parse(getItem("message"));
+
+            $(".name").text(message.name);
+            $(".mobile a").attr("tel", message.mobile).text(message.mobile);
+            $(".address").text(message.address);
+
+            $(".navigation").on("click", function () {
+                location.href = "http://apis.map.qq.com/tools/routeplan/eword=" + message.name +
+                    "&epointx=" + message.lng + "&epointy=" + message.lat +
+                    "?referer=myapp&key=4LYBZ-CHBRG-TIMQ3-I3N32-2LJ4K-FZBTY"
+            })
+        }
+
+    });
+</script>

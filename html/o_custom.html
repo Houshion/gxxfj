@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <title>自定义</title>
+    <style>
+        .start,
+        .end {
+            text-align: center
+        }
+    </style>
+</head>
+
+<body>
+    <div class="customNav">
+        <div class="bfff border-b pd-15 flex title">
+            <div class="wd-30 ta-center">开始时间</div>
+            <div class="wd-30 ta-center">持续时间(分)</div>
+            <div class="wd-30 ta-center">模式选择</div>
+        </div>
+    </div>
+    <div id="customList">
+        <!-- <div class="bfff border-b pd-15 flex content colmain ta-center">
+            <div class="wd-30 ontime">8:00</div>
+            <div class="wd-30">10</div>
+            <div class="wd-30">自动</div>
+            <div class="wd-10 delete">&otimes;</div>
+        </div> -->
+    </div>
+    <div class="mainbtn add" onclick="openBox()">添加</div>
+    <!-- 遮罩层 -->
+    <div class="mask hide"></div>
+    <!-- 隐藏框 -->
+    <!-- 设备1 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="custom1">
+        <div class="pd-15">
+            <div class="time">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">时间设置</div>
+                <!-- <div class="flex border-b mg-20">
+                    <div id="start" class="wd-50">开始运行</div>
+                    <div id="end" class="wd-50">运行</div>
+                </div> -->
+                <div class="flex border-b mg-20">
+                    <input type="text" id='start1' class="wd-50 input start" placeholder="00：00">
+                    <input type="text" id='end1' class="wd-50 input end" placeholder="1" value="1" />
+                </div>
+            </div>
+            <div class="model">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">模式选择</div>
+                <div class="flex weui-cells weui-cells_checkbox pinitial">
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="zd1">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio1" class="weui-check" id="zd1" checked data-type="0">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>自动</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="sm1">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio1" class="weui-check" id="sm1" data-type="4">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>睡眠</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="nxh1">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio1" class="weui-check" id="nxh1" data-type="1">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>内循环</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#custom1'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmCustom">确认</div>
+        </div>
+    </div>
+    <!-- 设备2 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="custom2">
+        <div class="pd-15">
+            <div class="time">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">时间设置</div>
+                <div class="flex border-b mg-20">
+                    <input type="text" id='start2' class="wd-50 input start" placeholder="00：00">
+                    <input type="text" id='end2' class="wd-50 input end" placeholder="0" value="0" />
+                </div>
+            </div>
+            <div class="model">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">模式选择</div>
+                <div class="flex flexWrap weui-cells weui-cells_checkbox pinitial">
+                    <div class="wd-50 box">
+                        <label class="weui-cell weui-check__label" for="zd2">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio2" class="weui-check" id="zd2" checked data-type="1">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>自动</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-50 box">
+                        <label class="weui-cell weui-check__label" for="sm2">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio2" class="weui-check" id="sm2" data-type="3">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>睡眠</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-50 box">
+                        <label class="weui-cell weui-check__label" for="js2">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio2" class="weui-check" id="js2" data-type="2">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>极速</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-50 box">
+                        <label class="weui-cell weui-check__label" for="fs2">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio2" class="weui-check" id="fs2" data-type="4">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>手动</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#custom2'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmCustom">确认</div>
+        </div>
+    </div>
+    <!-- 设备3 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="custom3">
+        <div class="pd-15">
+            <div class="time">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">时间设置</div>
+                <div class="flex border-b mg-20">
+                    <input type="text" id='start3' class="wd-50 input start" placeholder="00：00">
+                    <input type="text" id='end3' class="wd-50 input end" placeholder="0" value="0" />
+                </div>
+            </div>
+            <div class="model">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">模式选择</div>
+                <div class="flex weui-cells weui-cells_checkbox pinitial">
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="zd3">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio3" class="weui-check" id="zd3" checked data-type="2">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>自动</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="fs3">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio3" class="weui-check" id="fs3" data-type="3">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>风速</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="sm3">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio3" class="weui-check" id="sm3" data-type="5">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>睡眠</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#custom3'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmCustom">确认</div>
+        </div>
+    </div>
+    <!-- 风速2 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="speed2">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">风速设置</div>
+            <div class="wd-50 flex mg-auto colmain fontb">
+                <div class="wd-25 reducebtn box">-</div>
+                <div class="wd-50">
+                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" value="1" min="1" max="6" class="numInput inputSpeed2 bcolf5 borderNone wd-100 ta-center pd-t-5 pd-b-5">
+                </div>
+                <div class="wd-25 plusbtn box">+</div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#speed2'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmSpeed2">确认</div>
+        </div>
+    </div>
+    <!-- 风速3 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="speed3">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">风速设置</div>
+            <div class="wd-50 flex mg-auto colmain fontb">
+                <div class="wd-25 reducebtn box">-</div>
+                <div class="wd-50">
+                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" value="1" min="1" max="6" class="numInput inputSpeed3 bcolf5 borderNone wd-100 ta-center pd-t-5 pd-b-5">
+                </div>
+                <div class="wd-25 plusbtn box">+</div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#speed3'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmSpeed3">确认</div>
+        </div>
+    </div>
+    <!-- 删除 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="delete">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">温馨提示</div>
+            <div class="wd-80 flex mg-auto colmain fontb ta-center">是否删除这条预定时间？</div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#delete'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmDelete">确认</div>
+        </div>
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script src="../js/pickTime.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script>
+        var deviceType = getParam().type
+        var _this = $('#custom' + deviceType);
+        $('.confirm').on('click', function () {
+            hideModal(_this)
+        })
+
+        function openBox() {
+            showModal(_this)
+        }
+
+        var speedVal2;
+        // 设备2风速减
+        $("#speed2").on("click", ".reducebtn", function () {
+            var speedVal2 = parseInt($(".inputSpeed2").val());
+            if (speedVal2 > 1) {
+                speedVal2 = speedVal2 - 1;
+                $(".inputSpeed2").val(speedVal2);
+            }
+        })
+        // 设备2风速加
+        $("#speed2").on("click", ".plusbtn", function () {
+            speedVal2 = parseInt($(".inputSpeed2").val());
+            if (speedVal2 < 6) {
+                speedVal2 = speedVal2 + 1;
+                $(".inputSpeed2").val(speedVal2);
+            }
+        })
+        // 设备3风速减
+        $("#speed3").on("click", ".reducebtn", function () {
+            var speedVal3 = parseInt($(".inputSpeed3").val());
+            if (speedVal3 > 1) {
+                speedVal3 = speedVal3 - 1;
+                $(".inputSpeed3").val(speedVal3);
+            }
+        })
+        // 设备3风速加
+        $("#speed3").on("click", ".plusbtn", function () {
+            var speedVal3 = parseInt($(".inputSpeed3").val());
+            if (speedVal3 < 6) {
+                speedVal3 = speedVal3 + 1;
+                $(".inputSpeed3").val(speedVal3);
+            }
+        })
+
+        $("input[name='radio2']").on("click", function () {
+            if ($(this).data("type") == 4) {
+                showModal($('#speed2'));
+                $("#custom2").hide();
+            }
+        });
+        $("input[name='radio3']").on("click", function () {
+            if ($(this).data("type") == 3) {
+                showModal($('#speed3'));
+                $("#custom3").hide();
+            }
+        });
+
+        // 确认自定义事件选择隐藏框
+        $(".confirmCustom").on("click", function () {
+
+            console.log("click")
+
+            // 添加数据
+            var param = {
+                api_name: 'set_appointment',
+                sign: 'xinfengji',
+                macno: getParam().macno,
+            }
+
+            if (deviceType == 1) {
+                var input = $("input[name='radio1']:checked").parent().siblings(".weui-cell__bd").children().text();
+                var type = $("input[name='radio1']:checked").data("type");
+                var hour = parseInt($("#end1").val().trim())*60; //持续时间
+                var start = $("#start1").val().replace(/\s|\xA0/g, ""); //开始时间
+                param.type = type
+                param.on_time = start
+                param.totaltime = hour
+                console.log($("#end1").val().trim())
+                console.log(parseInt($("#end1").val().trim()))
+                console.log(parseInt($("#end1").val().trim())*60)
+            } else if (deviceType == 2) {
+                var input = $("input[name='radio2']:checked").parent().siblings(".weui-cell__bd").children().text();
+                var type = $("input[name='radio2']:checked").data("type")
+                var start = $("#start2").val().replace(/\s|\xA0/g, ""); //开始时间
+                var hour = parseInt($("#end2").val().trim())*60; //持续时间
+                param.speed = $(".inputSpeed2").val();
+                param.type = type
+                param.on_time = start
+                param.totaltime = hour
+            } else if (deviceType == 3) {
+                var input = $("input[name='radio3']:checked").parent().siblings(".weui-cell__bd").children().text();
+                var type = $("input[name='radio3']:checked").data("type")
+                var start = $("#start3").val().replace(/\s|\xA0/g, ""); //开始时间
+                var hour = parseInt($("#end3").val().trim())*60; //持续时间
+                param.speed = $(".inputSpeed3").val();
+                param.type = type
+                param.on_time = start
+                param.totaltime = hour
+            }
+            // if (hour.split("")[0] == 0) {
+            //     if (hour.split("")[1] == 0) {
+            //         dlctipbox.show("时间格式有误");
+            //     } else {
+            //         param.totaltime = param.totaltime.split("")[1];
+            //         ajaxPost1(param, "Xinfengji/api", function (res) {
+            //             if (res.code == 1) {
+            //                 dlctipbox.show(res.msg);
+            //                 location.reload();
+            //             } else {
+            //                 dlctipbox.show(res.msg);
+            //             }
+            //         });
+            //         hideModal(_this);
+            //         $("#customBox").show();
+            //     }
+            // } else {
+                ajaxPost1(param, "Xinfengji/api", function (res) {
+                    if (res.code == 1) {
+                        dlctipbox.show(res.msg);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        dlctipbox.show(res.msg);
+                    }
+                });
+                hideModal(_this);
+                $("#customBox").show();
+            // }
+        })
+        // 删除时间设定
+        var on_time, dom;
+        $("#customList").on("click", ".delete", function () {
+            on_time = $(this).siblings(".ontime").text();
+            // $("#delete").show();
+            dom = $(this);
+            showModal($('#delete'));
+        });
+
+        $(".confirmDelete").on("click", function () {
+            ajaxPost1({
+                api_name: 'delete_appointment',
+                macno: getParam().macno,
+                on_time: on_time
+            }, "Xinfengji/api", function (res) {
+                dlctipbox.show(res.msg);
+                dom.parent().remove();
+            });
+            hideModal($('#delete'));
+        });
+
+        // 确认风速2隐藏框
+        $(".confirmSpeed2").on("click", function () {
+            $("#speed2").hide();
+            $("#custom2").show();
+        });
+        // 确认风速3隐藏框
+        $(".confirmSpeed3").on("click", function () {
+            $("#speed3").hide();
+            $("#custom3").show();
+        });
+
+        var param = {
+            api_name: 'getappointment',
+            macno: getParam().macno
+        }
+        ajaxPost1(param, "Xinfengji/api", function (res) {
+            for (var i = 0; i < res.data.length; i++) {
+                $("#customList").append(
+                    '<div class="bfff border-b pd-15 flex content ta-center">' +
+                    '<div class="wd-30 ontime">' + res.data[i].on_time + '</div>' +
+                    '<div class="wd-30">' + res.data[i].totaltime + '</div>' +
+                    '<div class="wd-30">' + res.data[i].ch_type + '</div>' +
+                    '<div class="wd-10 delete">&otimes;</div>' +
+                    '</div>'
+                )
+            }
+        });
+    </script>
+</body>
+
+</html>

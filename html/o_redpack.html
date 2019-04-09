@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>我的红包</title>
+    <style>
+    .button {
+        border-radius: 30px;
+        padding: 10px;
+        background: #2bb7e8;
+        color: #ffffff;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="redpackList flex flexWrap pd-10">
+        <!--   <div class="redpack bfff">
+            <div class="ta-center pd-30">
+                <img src="../img/o_hongbao1.png" class="wd-40 mg-10">
+                <div class="font16">
+                    <span class="colfail">￥50.00</span>/
+                    <span>红包</span>
+                </div>
+                <div class="col666">2018-05-13</div>
+            </div>
+        </div>
+       -->
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script>
+    var type = getParam().type;
+    var dataUrl = getParam();
+    var s = getParam().s;
+    dataUrl.id = getParam().id;
+    var page = 1,
+        pagesize = 99;
+
+    if (s == 2) {
+        dlc_request('app/FanMac/api', {
+            api_name: 'redPacket',
+            token: user_token(),
+            page: page,
+            pagesize: pagesize
+        }, function(res) {
+            console.log(res);
+            if (res.code == 1) {
+                if (res.data.length == 0) {
+                    $('.redpackList').html(emptyTip('暂无数据'));
+                } else {
+                    var str = '';
+                    var a = res.data;
+                    for (i in a) {
+                        str += '<div class="redpack bfff" data-id=' + a[i].id + ' data-hongbao_id=' + a[i].hongbao_id +
+                            ' data-vipid=' + a[i].vipid + '  data-status=' + a[i].status + '  data-money=' + a[
+                                i].money + ' data-ctime=' + a[i].ctime.slice(0, 10) + '>' +
+                            '<div class="ta-center pd-30">' +
+                            '<img src="../img/o_hongbao1.png" class="wd-40 mg-10">' +
+                            '<div class="font16">' +
+                            '<span class="colfail">￥' + a[i].money + '</span>' +
+                            '<span>' + a[i].name + '</span>' +
+                            '</div>' +
+                            '<div class="col666">' + a[i].ctime.slice(0, 10) + '</div>' +
+                            '</div>' +
+                            '</div>'
+                    }
+                    $('.redpackList').html(str);
+                    $(".redpackList").append('<div class="ta-center button wd-100 mg-t-10 noRedPack">不使用红包</div>');
+                }
+            } else if (res.code == 0) {
+                $('.redpackList').html(emptyTip('暂无数据'));
+            } else {
+                dlctipbox.show(res.msg);
+            }
+        }, false)
+        $(".redpackList").on("click", ".redpack", function() {
+            dataUrl.vipid = $(this).data("vipid");
+            dataUrl.redpackId = $(this).data("id");
+            dataUrl.redpackMoney = $(this).data("money");
+            setTimeout(function() {
+                if (dataUrl.redpackId) {
+                    _href('o_pay.html', dataUrl)
+                }
+            }, 1500);
+
+        });
+        $(".redpackList").on("click", ".noRedPack", function() {
+            dataUrl.redpackId = "";
+            dataUrl.redpackMoney = "0";
+            _href('o_pay.html', dataUrl)
+        });
+    } else {
+        dlc_request('app/user/api', {
+            api_name: 'myRedpacket',
+            token: user_token(),
+            page: page,
+            pagesize: pagesize
+        }, function(res) {
+            console.log(res);
+            if (res.code == 1) {
+                if (res.data.length == 0) {
+                    $('.redpackList').html(emptyTip('暂无数据'));
+                } else {
+                    var str = '';
+                    var a = res.data;
+                    for (i in a) {
+                        str += '<div class="redpack bfff" data-id=' + a[i].id + ' data-hongbao_id=' + a[i].hongbao_id +
+                            ' data-vipid=' + a[i].vipid + '  data-status=' + a[i].status + '  data-money=' + a[
+                                i].money + ' data-ctime=' + a[i].ctime.slice(0, 10) + '>' +
+                            '<div class="ta-center pd-30">' +
+                            '<img src="../img/o_hongbao1.png" class="wd-40 mg-10">' +
+                            '<div class="font16">' +
+                            '<span class="colfail">￥' + a[i].money + '</span>' +
+                            '<span>' + a[i].name + '</span>' +
+                            '</div>' +
+                            '<div class="col666">' + a[i].ctime.slice(0, 10) + '</div>' +
+                            '</div>' +
+                            '</div>'
+                    }
+                    $('.redpackList').html(str);
+                    $(".redpackList").append('<div class="ta-center button wd-100 mg-t-10 noRedPack">不使用红包</div>');
+                }
+            } else if (res.code == 0) {
+                $('.redpackList').html(emptyTip('暂无数据'));
+            } else {
+                dlctipbox.show(res.msg);
+            }
+        }, false)
+        $('.redpackList').on('click', '.redpack', function() {
+            location.href = 'y_redPark.html?id=' + $(this).data('id') + '&hongbao_id=' + $(this).data(
+                    'hongbao_id') + '&vipid=' + $(this).data('vipid') + '&status=' + $(this).data('status') +
+                '&money=' + $(this).data('money') + '&ctime=' + $(this).data('ctime');
+            // console.log($(this).data('id'))
+        })
+    }
+    </script>
+</body>
+
+</html>

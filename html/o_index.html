@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+    <title>共享新风机</title>
+    <style>
+        .fixed_bottom .col999 {
+            margin-top: -10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="flex bfff fixed_top" id="h_index">
+        <div class="ta-center wd-33 border-r" onclick="Scan()">扫码使用</div>
+        <div class="ta-center wd-33 border-r" onclick="Booking()">预约使用</div>
+        <div class="ta-center wd-33" onclick="Return()">预约退还</div>
+    </header>
+    <section class="mg-t-40 pd-b-60" id="deviceList">
+        <ul class="flex flexWrap pd-10 deviceList">
+        </ul>
+    </section>
+    <footer class="flex bfff fixed_bottom" id="f_index">
+        <div class="ta-center wd-33 pd-5" onclick="location.href='./y_service.html'">
+            <img src="../img/o_fuwu.png" alt="">
+            <div class="col999">在线服务</div>
+        </div>
+        <div class="ta-center wd-33 pd-5" onclick="location.href='http://sdymkjl.com/product/showproduct.php?id=7'">
+            <img src="../img/o_goumai.png" alt="">
+            <div class="col999">在线购买</div>
+        </div>
+        <div class="ta-center wd-33 pd-5 infoMsg" onclick="location.href='./y_center.html'">
+            <img src="../img/o_geren.png" alt="">
+            <div class="col999">个人中心</div>
+        </div>
+    </footer>
+    <!-- 弹窗box -->
+    <div class="mask hide"></div>
+    <!-- 隐藏框 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="Scan">
+        <div class="pd-15">
+            <div class="borderBtn" onclick="ScanCode()">扫一扫</div>
+            <div class="borderBtn" onclick="InputCode()">输入设备编码</div>
+            <div class="borderBtn" onclick="RecommendCode()">输入推荐人设备编码</div>
+        </div>
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script>
+        $.showLoading();
+
+        isLogin(function (res) {
+            if (res.flag == 1) { //登录成功
+
+                ajaxPost({
+                    api_name: 'system_num',
+                    token: user_token()
+                }, 'App/Online/api/', function (res) {
+                    if (res.code == 1) {
+                        console.log(res.data)
+                        if (res.data) {
+                            $(".infoMsg").prepend(
+                                '<span class="weui-badge Msg" style="position: absolute;margin-left: 1.5em;">' +
+                                res.data + '</span>');
+                        }
+                    } else {
+                        dlctipbox.show(res.msg);
+                    }
+                });
+
+                // ajaxPost({
+                //     api_name: "userData",
+                //     token: getItem("token")
+                // }, "app/user/api", function (res) {
+                //     if (res.data.mobile == 0) {
+                //         goTo("./o_binding.html");
+                //         // return false;
+                //     } else {
+                        var param = {
+                            api_name: "home",
+                            token: getItem("token"),
+                            page: 1,
+                            pagesize: 999,
+                        }
+
+                        ajaxPost(param, "app/FanMac/api", function (res) {
+                            $.hideLoading();
+                            console.log(JSON.stringify(res));
+                            if (res.code == 1) {
+                                if (res.type == 2) {
+                                    for (var i = 0; i < res.data.length; i++) {
+                                        $(".deviceList").append(
+                                            '<li class="ta-center bfff" data-id="' + res.data[
+                                                i].id + '">' +
+                                            '<img src="' + res.data[i].device_pic +
+                                            '" class="wd-100">' +
+                                            '<div class="pd-10">' + res.data[i].device_number +
+                                            '</div>' +
+                                            '</li>'
+                                        )
+                                    }
+                                    $(".deviceList img").height($(".deviceList img").width());
+
+                                } else {
+                                    goTo("./o_indexDevice.html");
+                                }
+                            }
+                        });
+                //     }
+                // });
+
+            } else {
+                dlctipbox.show(res.msg);
+            }
+        });
+
+        $(".deviceList").on("click", "li", function () {
+            var id = $(this).data("id");
+            goTo("o_deviceDetail.html?id=" + id);
+        })
+    </script>
+</body>
+
+</html>

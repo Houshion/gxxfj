@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>优惠券</title>
+    <style type="text/css">
+        .col9 {
+            color: #999;
+        }
+
+        .bg9 {
+            background: #999;
+        }
+
+        .flex_x {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .p20 {
+            padding: 20px 0;
+        }
+
+        .button {
+            border-radius: 30px;
+            padding: 10px;
+            background: #2bb7e8;
+            color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cuponList pd-10">
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script>
+        var type = getParam().type;
+        var dataUrl = getParam();
+        var money = getParam().money;
+        var page = 1,
+            pagesize = 10;
+        var s = getParam().s;
+        if (s == 2) {
+            dlc_request('app/FanMac/api', {
+                api_name: 'coupon',
+                token: user_token(),
+                totalprice: money,
+                page: page,
+                page_size: pagesize
+            }, function (res) {
+                console.log(res);
+                if (res.code == 1) {
+                    if (res.data.length == 0) {
+                        $('.cuponList').html('<li class="flex_x p20">暂无数据</li>');
+                    } else {
+                        var str = '';
+                        var a = res.data;
+                        for (i in a) {
+                            var etime = a[i].etime.split(" ")[0];
+                            // var ctime = a[i].ctime.split(" ")[0];
+                            str += '<div class="stamp" data-id=' + a[i].id + ' data-coupon_id=' + a[i].coupon_id +
+                                ' data-vipid=' + a[i].vipid + ' data-coupon_money=' + a[i].coupon_money +
+                                '> <div class="par border-r"> <span class="' + (a[i].status == 0 ? '' : 'col9') +
+                                '">' + a[i].coupon_money + '</span> <sub>绿蒂币</sub> <div class="ta-center wd-80 bmain ' + (a[i].status ==
+                                    0 ? '' : 'bg9') + '">' + (a[i].status == 0 ? '未使用' : a[i].status == 1 ?
+                                    '已使用' :
+                                    a[i].status == 2 ? '已过期' : '不可用') + '</div> </div> <div class="copy"> ' + a[
+                                    i].coupon_name +
+                                ' <div>有效期(' + (etime == '1970-01-01 08:00:00' ? etime : etime) +
+                                ')</div> <div> 满'+a[i].quota+'可用 </div> </div> </div>'
+                        }
+                        $('.cuponList').html(str);
+                        $(".cuponList").append('<div class="ta-center button mg-t-10 noCoupon">不使用优惠券</div>');
+                    }
+                } else if (res.code == 0) {
+                    $('.cuponList').html('<li class="flex_x p20">暂无数据</li>');
+                } else {
+                    dlctipbox.show(res.msg);
+                }
+            }, false)
+            $(".cuponList").on("click", ".stamp", function () {
+                var param = {
+                    id: getParam().id,
+                    token: getItem("token"),
+                };
+                dataUrl.id = getParam().id;
+                dataUrl.couponId = $(this).data("id");
+                dataUrl.couponMoney = $(this).data("coupon_money");
+                console.log(dataUrl)
+                setTimeout(function () {
+                    if (dataUrl.couponId) {
+                        _href('o_pay.html', dataUrl);
+                    }
+                }, 1500)
+            });
+            $(".cuponList").on("click", ".noCoupon", function () {
+                var param = {
+                    id: getParam().id,
+                    token: getItem("token"),
+                };
+                dataUrl.couponId = "";
+                dataUrl.couponMoney = "0";
+                console.log(dataUrl)
+                _href('o_pay.html', dataUrl);
+            });
+        } else {
+            dlc_request('app/user/api', {
+                api_name: 'myCoupon',
+                token: user_token(),
+                page: page,
+                pagesize: pagesize
+            }, function (res) {
+                console.log(res);
+                if (res.code == 1) {
+                    if (res.data.length == 0) {
+                        $('.cuponList').html('<li class="flex_x p20">暂无数据</li>');
+                    } else {
+                        var str = '';
+                        var a = res.data;
+                        for (i in a) {
+                            var etime = a[i].etime.split(" ")[0];
+                            var ctime = a[i].ctime.split(" ")[0];
+                            str += '<div class="stamp" data-id=' + a[i].id + ' data-coupon_id=' + a[i].coupon_id +
+                                ' data-vipid=' + a[i].vipid + ' data-coupon_money=' + a[i].coupon_money +
+                                '> <div class="par border-r"> <span class="' + (a[i].status == 0 ? '' : 'col9') +
+                                '">' + a[i].coupon_money + '</span> <sub>绿蒂币</sub> <div class="ta-center wd-80 bmain ' + (a[i].status ==
+                                    0 ? '' : 'bg9') + '">' + (a[i].status == 0 ? '未使用' : a[i].status == 1 ?
+                                    '已使用' :
+                                    a[i].status == 2 ? '已过期' : '不可用') + '</div> </div> <div class="copy"> ' + a[
+                                    i].coupon_name +
+                                ' <div>有效期(' + (etime == '1970-01-01 08:00:00' ? ctime : etime) +
+                                ')</div> <div> 满'+a[i].quota+'可用 </div> </div> </div>'
+                        }
+                        $('.cuponList').html(str);
+                        $(".cuponList").append('<div class="ta-center button mg-t-10 noCoupon">不使用优惠券</div>');
+                    }
+                } else if (res.code == 0) {
+                    $('.cuponList').html('<li class="flex_x p20">暂无数据</li>');
+                } else {
+                    dlctipbox.show(res.msg);
+                }
+            }, false)
+        }
+    </script>
+</body>
+
+</html>

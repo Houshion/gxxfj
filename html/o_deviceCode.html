@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>输入编码</title>
+    <style>
+        body {
+            background: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="deviceCode pd-10">
+        <div class="pd-t-10 pd-b-10 font16">设备编码</div>
+        <div>
+            <input class="input border-b" type="text" placeholder="请输入设备编码" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" />
+        </div>
+        <div class="mainbtn mg-t-50">确定</div>
+    </div>
+
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script>
+        $(".mainbtn").on("click", function () {
+
+            if (!isNull($(".input").val())) {
+                ajaxPost({
+                    api_name: "getDetail",
+                    token: getItem("token"),
+                    macno: $(".input").val(),
+                }, "app/FanMac/api", function (res) { //扫码
+                    if (res.code == 1) {
+                        location.href = "o_pay.html?type=1&macno=" + $(".input").val();
+                    } else {
+                        dlctipbox.show(res.msg);
+                    }
+                });
+                
+            } else {
+                dlctipbox.show("设备码不能为空")
+            }
+        });
+    </script>
+</body>
+
+</html>

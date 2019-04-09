@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <title>扫码共享</title>
+</head>
+
+<body>
+
+</body>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../js/dlc.js"></script>
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+<script src="../js/o_base.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+    isLogin(function (res) {
+        if (res.flag == 1) { //登录成功
+            // layer.open({
+            //     type: 2,
+            //     shadeClose: false,
+            //     time: 3,
+            //     content: '加载中...'
+            // });
+            // ajaxPost({
+            //     api_name: "userData",
+            //     token: getItem("token")
+            // }, "app/user/api", function (res) {
+            //     if (res.data.mobile == 0) {
+            //         goTo("./o_binding.html");
+            //         // return false;
+            //     } else {
+            ScanCode();
+            //     }
+            // });
+        }
+    });
+</script>
+
+</html>

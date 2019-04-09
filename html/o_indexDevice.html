@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.min.css">
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <title>共享新风机</title>
+    <style>
+        .contentBox {
+            height: 300px;
+            width: 100%;
+            background-color: #fff;
+            position: absolute;
+            overflow: hidden;
+            position: relative
+        }
+
+        .contentBox ul {
+            height: 300px;
+            width: 300%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: all 0.5s ease
+        }
+
+        .contentBox ul li {
+            height: 300px;
+            width: 100%;
+        }
+
+        #customBox .delete {
+            width: 20px;
+            height: 20px;
+            border: 1px #2bb7e8 solid;
+            border-radius: 50%;
+            line-height: 22px;
+        }
+
+        .weui-progress__bar {
+            height: 10px;
+        }
+
+        .weui-slider__track {
+            background-color: #2bb7e8;
+        }
+
+        .fixed_bottom .col999 {
+            margin-top: -10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="flex border-b bfff" id="h_index">
+        <div class="ta-center wd-33 border-r" onclick="Scan()">扫码使用</div>
+        <div class="ta-center wd-33 border-r" onclick="Booking()">预约使用</div>
+        <div class="ta-center wd-33" onclick="Return()">预约退还</div>
+    </header>
+    <section class="pd-t-5 bfff h100" id="deviceList">
+        <div class="swiper-container h100">
+            <div class="swiper-wrapper h100">
+            </div>
+        </div>
+    </section>
+    <footer class="flex fixed_bottom border-t bfff" id="f_index">
+        <div class="ta-center wd-33 pd-5" onclick="location.href='./y_service.html'">
+            <img src="../img/o_fuwu.png" alt="">
+            <div class="col999">在线服务</div>
+        </div>
+        <div class="ta-center wd-33 pd-5" onclick="location.href='http://sdymkjl.com/product/showproduct.php?id=7'">
+            <img src="../img/o_goumai.png" alt="">
+            <div class="col999">在线购买</div>
+        </div>
+        <div class="ta-center wd-33 pd-5" onclick="location.href='./y_center.html'">
+            <img src="../img/o_geren.png" alt="">
+            <div class="col999">个人中心</div>
+        </div>
+    </footer>
+    <!-- 遮罩层 -->
+    <div class="mask hide"></div>
+    <!-- 隐藏框 -->
+    <!-- 手动时风速 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="hand">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">风速设置</div>
+            <div class="border-b pd-t-15 pd-b-15 flex">
+                <div class="wd-20">送风</div>
+                <div class="weui-slider-box wd-100" id="inwind">
+                    <div class="weui-slider">
+                        <div id="sliderInner1" class="weui-slider__inner">
+                            <div id="sliderTrack1" style="width: 1%;" class="weui-slider__track"></div>
+                            <div id="sliderHandler1" style="left: 1%;" class="weui-slider__handler"></div>
+                        </div>
+                    </div>
+                    <div id="inwindValue" class="weui-slider-box__value">1</div>
+                </div>
+            </div>
+            <div class="pd-t-15 pd-b-15 flex">
+                <div class="wd-20">排风</div>
+                <div class="weui-slider-box wd-100" id="outwind">
+                    <div class="weui-slider">
+                        <div id="sliderInner2" class="weui-slider__inner">
+                            <div id="sliderTrack2" style="width: 1%;" class="weui-slider__track"></div>
+                            <div id="sliderHandler2" style="left: 1%;" class="weui-slider__handler"></div>
+                        </div>
+                    </div>
+                    <div id="outwindValue" class="weui-slider-box__value">1</div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#hand'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirm handWind">确认</div>
+        </div>
+    </div>
+    <!-- 风速2 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="speed2">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">风速设置</div>
+            <div class="wd-50 flex mg-auto colmain fontb">
+                <div class="wd-25 reducebtn box">-</div>
+                <div class="wd-50">
+                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" value="1" min="1" max="6" class="numInput inputSpeed2 bcolf5 borderNone wd-100 ta-center pd-t-5 pd-b-5">
+                </div>
+                <div class="wd-25 plusbtn box">+</div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#speed2'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmSpeed2">确认</div>
+        </div>
+    </div>
+    <!-- 风速3 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="speed3">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">风速设置</div>
+            <div class="wd-50 flex mg-auto colmain fontb">
+                <div class="wd-25 reducebtn box">-</div>
+                <div class="wd-50">
+                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" value="1" min="1" max="6" class="numInput inputSpeed3 bcolf5 borderNone wd-100 ta-center pd-t-5 pd-b-5">
+                </div>
+                <div class="wd-25 plusbtn box">+</div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#speed3'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmSpeed3">确认</div>
+        </div>
+    </div>
+    <!-- 公用头部 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="Scan">
+        <div class="pd-15">
+            <div class="borderBtn" onclick="ScanCode()">扫一扫</div>
+            <div class="borderBtn" onclick="InputCode()">输入设备编码</div>
+            <div class="borderBtn" onclick="RecommendCode()">输入推荐人设备编码</div>
+        </div>
+    </div>
+    <!-- 自定义模式 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="customBox">
+        <div id="customList">
+            <div class="bfff border-b pd-15 flex title">
+                <div class="wd-45 ta-center">时间设定</div>
+                <div class="wd-45 ta-center">模式选择</div>
+            </div>
+            <div class="bfff border-b pd-15 flex content colmain">
+                <div class="wd-45 ta-center">8:00~12:00</div>
+                <div class="wd-45 ta-center">自动</div>
+                <div class="wd-10 ta-center">
+                    <div class="delete">&times;</div>
+                </div>
+            </div>
+        </div>
+        <div class="mainbtn add mg-b-40 openCustom">添加</div>
+    </div>
+    <div class="wd-80 bfff hide maskBox radius10" id="custom">
+        <div class="pd-15">
+            <div class="time">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">时间设置</div>
+                <div class="flex border-b mg-20">
+                    <input type="text" id='start' class="wd-50 input" placeholder="00：00">
+                    <input type="text" id='end' class="wd-50 input" placeholder="00：00" />
+                </div>
+            </div>
+            <div class="model">
+                <div class="ta-center font16 bcolf5 mg-auto wd-50 pd-5 radius30">模式选择</div>
+                <div class="flex weui-cells weui-cells_checkbox pinitial">
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="zd">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio1" class="weui-check" id="zd" checked>
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>自动</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="sm">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio1" class="weui-check" id="sm">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>睡眠</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="wd-33">
+                        <label class="weui-cell weui-check__label" for="nxh">
+                            <div class="weui-cell__hd">
+                                <input type="radio" name="radio1" class="weui-check" id="nxh">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>内循环</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb closeCustom">取消</div>
+            <div class="box wd-50 pd-15 colmain confirm confirmCustom">确认</div>
+        </div>
+    </div>
+    <!-- 设备4风速调节 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="speed4">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">风速设置</div>
+            <div class="wd-50 flex mg-auto colmain fontb">
+                <div class="wd-25 reducebtn box">-</div>
+                <div class="wd-50">
+                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" value="1" min="1" max="3" class="numInput inputSpeed4 bcolf5 borderNone wd-100 ta-center pd-t-5 pd-b-5">
+                </div>
+                <div class="wd-25 plusbtn box">+</div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#speed4'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmSpeed4">确认</div>
+        </div>
+    </div>
+    <!-- 设备4定时 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="times4">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">定时时长</div>
+            <div class="wd-50 flex mg-auto colmain fontb">
+                <div class="wd-25 reducebtn box">-</div>
+                <div class="wd-50">
+                    <input type="number" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')" value="0" min="0" max="8" class="numInput timeInput4 bcolf5 borderNone wd-100 ta-center pd-t-5 pd-b-5">
+                </div>
+                <div class="wd-25 plusbtn box">+</div>
+            </div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#times4'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirmTimes4">确认</div>
+        </div>
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="../js/pickTime.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.min.js"></script>
+    <script src="../js/deviceDom.js"></script>
+    <script>
+        $(".h100").css("height", $(window).height() - 103);
+
+        var this_switch;
+
+        if (getItem("return") == 1) {
+            $.toast("亲爱的顾客，请手动开启设备", "text");
+            localStorage.removeItem("return");
+        }
+
+        function clickBtn(_this, swits) {
+            // if (status) {//设备已经开启的时候
+            if ($(_this).hasClass("swit")) { // 开关类按钮
+                var open = $(_this).data("status");
+                // $(_this).hasClass("pick") ? open = true : open = false;
+                console.log(device_id);
+                diviceSwitch(open, device_id, macno);
+            } else if ($(_this).hasClass('switch')) { // 状态开关按钮
+
+                if ($(_this).hasClass('speed')) {
+                    var dom = $(_this).data("dom"); // 打开风速相应隐藏框
+                    servType(_this, swits);
+                    showModal(dom);
+                    this_switch = _this;
+                } else if ($(_this).hasClass('time')) {
+                    var dom = $(_this).data("dom"); // 打开风速相应隐藏框
+                    showModal(dom);
+                    this_switch = _this;
+                } else {
+                    var status;
+                    $(_this).hasClass("pick") ? status = 0 : status = 1;
+                    swit($(_this).data("switch"), status); // 打开单一状态
+                }
+            } else if ($(_this).hasClass('custom')) { // 打开“自定义”
+                goTo("./o_custom.html?type=" + device_type + "&macno=" + macno);
+            } else if ($(_this).hasClass('servType')) {
+                servType(_this, swits);
+            }
+            // 风速调节
+            if ($(_this).hasClass("speed")) {
+                speed();
+            }
+            // }else{
+            //         diviceSwitch(open, device_id, macno);
+
+            // }
+        }
+
+        // 设备状态开关
+        function swit(res, status, device) {
+            var deviceParam = {
+                api_name: api_name,
+                sign: sign,
+                macno: macno,
+            };
+            if (res == "anion") { // 速效开关
+                deviceParam.anion = status;
+            } else if (res == "sterilize") { // 杀菌开关
+                deviceParam.sterilize = status;
+            } else if (res == "heating") { // 辅热开关
+                deviceParam.heating = status;
+            } else if (res == "lightstatus") { // 灯光开关
+                deviceParam.lightstatus = status;
+            } else if (res == "childrenlock") { // 童锁开关
+                deviceParam.childrenlock = status;
+            } else if (res == "newwind") { // 新风开关
+                deviceParam.newwind = status;
+            } else if (res == "arofene") { // 甲醛开关
+                deviceParam.arofene = status;
+            } else if (res == "windspeed") { // 风速
+                deviceParam.windspeed = status;
+                if(device == 2) deviceParam.type = 2;
+                // if(device == 3) deviceParam.type = 3;
+            } else if (res == "times") { // 定时
+                deviceParam.times = status;
+            }
+            ajaxPost1(deviceParam, "Xinfengji/api", function (res) {
+                if (res.code == 1) {
+                    loadDeviceinfo(index, device_type, macno, device_name);
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        loadDeviceinfo(index, device_type, macno, device_name);
+                    }, 40000);
+                } else {
+                    dlctipbox.show(res.msg);
+                }
+            });
+        }
+        // 设备服务开启
+        function deviceOpen(param) {
+            ajaxPost(param, "app/FanMac/api", function (res) {
+                if (res.code == 1) {
+                    loadDeviceinfo(index, device_type, macno, device_name);
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        loadDeviceinfo(index, device_type, macno, device_name);
+                    }, 40000);
+                    dlctipbox.show(res.msg);
+                    console.log(JSON.stringify(res))
+                } else {
+                    dlctipbox.show(res.msg);
+                }
+            });
+        }
+        // 设备服务关闭
+        function deviceClose(param) {
+            ajaxPost1(param, "Xinfengji/api", function (res) {
+                if (res.code == 1) {
+                    loadDeviceinfo(index, device_type, macno, device_name);
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        loadDeviceinfo(index, device_type, macno, device_name);
+                    }, 40000);
+                    dlctipbox.show(res.msg);
+                    console.log(JSON.stringify(res))
+                } else {
+                    dlctipbox.show(res.msg);
+                }
+            });
+        }
+        // 设备判断开关前往函数
+        function diviceSwitch(status, id, macno) {
+            if (!status) {
+                deviceOpen({
+                    api_name: "useMac",
+                    token: getItem("token"),
+                    id: id
+                })
+            } else {
+                deviceClose({
+                    api_name: api_name,
+                    sign: sign,
+                    macno: macno,
+                    swit: 0 // 设备关
+                });
+            }
+        }
+        // 风速调节
+        function speed() {
+            if (device_type == 1) {
+                showModal($('#hand'))
+            } else if (device_type == 2) {
+                showModal($('#speed2'))
+            } else if (device_type == 3) {
+                showModal($('#speed3'))
+            } else if (device_type == 4) {
+                showModal($('#speed4'))
+            }
+        }
+
+        /********* 关闭遮罩层 ***********/
+        $(".mask").on("click", function () {
+            $(this).fadeOut();
+            $(".maskBox").hide();
+        });
+        /********** 进度条加减 **********/
+        $(".rage").each(function () {
+            var rage = $(this).data("num");
+            if (rage == 100) {
+                $(this).addClass("rage1")
+            }
+        });
+
+        // 手动 确认按钮
+        $(".handWind").on("click", function () {
+            hideModal($('#hand'))
+            var deviceParam = {
+                api_name: api_name,
+                sign: sign,
+                macno: macno,
+                type: 2,
+                inwind: $("#inwindValue").text(),
+                outwind: $("#outwindValue").text()
+            }
+            ajaxPost1(deviceParam, "Xinfengji/api", function (res) {
+                if (res.code == 1) {
+                    $(this).text("开启设备");
+                    $(this).siblings().text("设备已关闭！");
+                    loadDeviceinfo(index, device_type, macno, device_name);
+                    clearInterval(timer);
+                    timer = setInterval(function () {
+                        loadDeviceinfo(index, device_type, macno, device_name);
+                    }, 40000);
+                } else {
+                    dlctipbox.show(res.msg);
+                }
+            });
+            servType($(".hand"))
+        })
+        var speedVal2, speedVal3;
+        // 设备2风速减
+        $("#speed2").on("click", ".reducebtn", function () {
+            var speedVal2 = parseInt($(".inputSpeed2").val());
+            if (speedVal2 > 1) {
+                speedVal2 = speedVal2 - 1;
+                $(".inputSpeed2").val(speedVal2);
+            }
+        })
+        // 设备2风速加
+        $("#speed2").on("click", ".plusbtn", function () {
+            speedVal2 = parseInt($(".inputSpeed2").val());
+            if (speedVal2 < 6) {
+                speedVal2 = speedVal2 + 1;
+                $(".inputSpeed2").val(speedVal2);
+            }
+        })
+        // 设备3风速减
+        $("#speed3").on("click", ".reducebtn", function () {
+            var speedVal3 = parseInt($(".inputSpeed3").val());
+            if (speedVal3 > 1) {
+                speedVal3 = speedVal3 - 1;
+                $(".inputSpeed3").val(speedVal3);
+            }
+        })
+        // 设备3风速加
+        $("#speed3").on("click", ".plusbtn", function () {
+            var speedVal3 = parseInt($(".inputSpeed3").val());
+            if (speedVal3 < 6) {
+                speedVal3 = speedVal3 + 1;
+                $(".inputSpeed3").val(speedVal3);
+            }
+        })
+        // 设备4风速减
+        $("#speed4").on("click", ".reducebtn", function () {
+            var speedVal4 = parseInt($(".inputSpeed4").val());
+            if (speedVal4 > 1) {
+                speedVal4 = speedVal4 - 1;
+                $(".inputSpeed4").val(speedVal4);
+            }
+        })
+        // 设备4风速加
+        $("#speed4").on("click", ".plusbtn", function () {
+            var speedVal4 = parseInt($(".inputSpeed4").val());
+            if (speedVal4 < 3) {
+                speedVal4 = speedVal4 + 1;
+                $(".inputSpeed4").val(speedVal4);
+            }
+        })
+        // 设备4风速减
+        $("#times4").on("click", ".reducebtn", function () {
+            var speedVal4 = parseInt($(".timeInput4").val());
+            if (speedVal4 > 1) {
+                speedVal4 = speedVal4 - 1;
+                $(".timeInput4").val(speedVal4);
+            }
+        })
+        // 设备4风速加
+        $("#times4").on("click", ".plusbtn", function () {
+            var speedVal4 = parseInt($(".timeInput4").val());
+            if (speedVal4 < 8) {
+                speedVal4 = speedVal4 + 1;
+                $(".timeInput4").val(speedVal4);
+            }
+        })
+        // 确认风速2隐藏框
+        $(".confirmSpeed2").on("click", function () {
+            hideModal($("#speed2"));
+            swit("windspeed", $(".inputSpeed2").val(), 2)
+            switchType();
+        })
+        // 确认风速3隐藏框
+        $(".confirmSpeed3").on("click", function () {
+            hideModal($("#speed3"));
+            swit("windspeed", $(".inputSpeed3").val(), 3)
+            // switchType();
+        })
+        // 确认风速调节4隐藏框
+        $(".confirmSpeed4").on("click", function () {
+            hideModal($("#speed4"));
+            swit("windspeed", $(".inputSpeed4").val(), 4)
+            switchType();
+        })
+        // 确认定时4隐藏框
+        $(".confirmTimes4").on("click", function () {
+            hideModal($("#times4"));
+            swit("times", $(".timeInput4").val())
+            switchType();
+        })
+
+        // 状态开关
+        function switchType() {
+            var img = $(this_switch).find("img");
+            var src = img.data("pic");
+            var pic = img.attr("src");
+
+            img.attr("src", src).data("pic", pic);
+        }
+        // 设备1运行模式
+        function servType(_this, swits) {
+            if (swits == 1) {
+                if (!$(_this).hasClass("pick")) {
+                    $(_this).addClass("pick");
+                    $(_this).siblings(".servType").removeClass("pick");
+                }
+
+                var img = $(_this).find("img");
+                var sImg = $(_this).siblings().find("img.pickImg");
+                var deviceType = $(_this).data("device_type");
+                var deviceParam = {
+                    api_name: api_name,
+                    sign: sign,
+                    macno: macno,
+                    type: $(_this).data("type"),
+                }
+
+                // 改变选中选项图片状态
+                if (!img.hasClass("pickImg")) {
+                    // 高亮选中图片颜色
+                    img.addClass("pickImg");
+                    var src = img.data("pic");
+                    var pic = img.attr("src");
+                    img.attr("src", src).data("pic", pic);
+                    // 取消未选中图片高亮
+                    sImg.removeClass("pickImg");
+                    var sSrc = sImg.data("pic");
+                    var sPic = sImg.attr("src");
+                    sImg.attr("src", sSrc).data("pic", sPic);
+                }
+
+
+                // if (deviceType == 2) {
+
+                // }else if (deviceType == 2) {
+
+                // }
+                console.log(JSON.stringify(deviceParam))
+
+                ajaxPost1(deviceParam, "Xinfengji/api", function (res) {
+                    if (res.code == 1) {
+                        dlctipbox.show(res.msg);
+                        loadDeviceinfo(index, device_type, macno, device_name);
+                        clearInterval(timer);
+                        timer = setInterval(function () {
+                            loadDeviceinfo(index, device_type, macno, device_name);
+                        }, 40000);
+                    } else {
+                        dlctipbox.show(res.msg);
+                    }
+                });
+            }
+        }
+
+        $('#inwind').slider(function (res) {
+            
+        });
+        $('#outwind').slider(function (res) {
+
+        });
+
+        // $(".servType").on("click", function () {
+
+
+        // })
+        // 设备2运行模式
+        // $(".servType2").on("click", function () {
+
+        //     if (!$(this).hasClass("pick")) {
+        //         $(this).addClass("pick");
+        //         $(this).siblings(".servType2").removeClass("pick");
+        //     }
+
+        //     var img = $(this).find("img");
+        //     var sImg = $(this).siblings().find("img.pickImg");
+
+        //     // 改变选中选项图片状态
+        //     if (!img.hasClass("pickImg")) {
+        //         // 高亮选中图片颜色
+        //         img.addClass("pickImg");
+        //         var src = img.data("pic");
+        //         var pic = img.attr("src");
+        //         img.attr("src", src).data("pic", pic);
+        //         // 取消未选中图片高亮
+        //         sImg.removeClass("pickImg");
+        //         var sSrc = sImg.data("pic");
+        //         var sPic = sImg.attr("src");
+        //         sImg.attr("src", sSrc).data("pic", sPic);
+        //     }
+        //     var deviceParam = {
+        //         api_name: api_name,
+        //         sign: sign,
+        //         macno: macno,
+        //     }
+        //     deviceParam.type = $(this).data("type")
+        //     deviceOpen(deviceParam);
+        // })
+        // // 设备3运行模式
+        // $(".servType3").on("click", function () {
+
+        //     if (!$(this).hasClass("pick")) {
+        //         $(this).addClass("pick");
+        //         $(this).siblings(".servType2").removeClass("pick");
+        //     }
+
+        //     var img = $(this).find("img");
+        //     var sImg = $(this).siblings().find("img.pickImg");
+
+        //     // 改变选中选项图片状态
+        //     if (!img.hasClass("pickImg")) {
+        //         // 高亮选中图片颜色
+        //         img.addClass("pickImg");
+        //         var src = img.data("pic");
+        //         var pic = img.attr("src");
+        //         img.attr("src", src).data("pic", pic);
+        //         // 取消未选中图片高亮
+        //         sImg.removeClass("pickImg");
+        //         var sSrc = sImg.data("pic");
+        //         var sPic = sImg.attr("src");
+        //         sImg.attr("src", sSrc).data("pic", sPic);
+        //     }
+        //     var deviceParam = {
+        //         api_name: api_name,
+        //         sign: sign,
+        //         macno: macno,
+        //     }
+        //     deviceParam.type = $(this).data("type")
+        //     deviceOpen(deviceParam);
+        // })
+        // // 设备4运行模式
+        // $(".servType4").on("click", function () {
+
+        //     if (!$(this).hasClass("pick")) {
+        //         $(this).addClass("pick");
+        //         $(this).siblings(".servType4").removeClass("pick");
+        //     }
+
+        //     var type = $(this).data("type");
+        //     var img = $(this).find("img");
+        //     var sImg = $(this).siblings().find("img.pickImg");
+        //     var deviceParam = {
+        //         api_name: api_name,
+        //         sign: sign,
+        //         macno: macno,
+        //         type: type
+        //     }
+
+        //     // 改变选中选项图片状态
+        //     if (!img.hasClass("pickImg")) {
+        //         // 高亮选中图片颜色
+        //         img.addClass("pickImg");
+        //         var src = img.data("pic");
+        //         var pic = img.attr("src");
+        //         img.attr("src", src).data("pic", pic);
+        //         // 取消未选中图片高亮
+        //         sImg.removeClass("pickImg");
+        //         var sSrc = sImg.data("pic");
+        //         var sPic = sImg.attr("src");
+        //         sImg.attr("src", sSrc).data("pic", sPic);
+        //     }
+        //     if (type != 0) {
+        //         deviceOpen(deviceParam);
+        //     }
+        // })
+    </script>
+</body>
+
+</html>

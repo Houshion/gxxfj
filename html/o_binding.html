@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <title>绑定手机</title>
+    <style>
+        .input {
+            width: 90%;
+            padding: 5px 0 5px 15px
+        }
+
+        #message {
+            width: 60%
+        }
+
+        .getCode {
+            padding: 5px;
+            border-radius: 30px;
+            background: #2bb7e8;
+            color: #ffffff;
+            text-align: center;
+            border: none;
+        }
+    </style>
+</head>
+
+<body class="bfff">
+    <div id="binding">
+        <div class="bindingMsg pd-15 mg-t-100">
+            <div class="border radius30 mg-t-15 pd-10">
+                <input type="text" id="phone" class="input radius30" placeholder="请输入您的手机号码" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')"
+                    maxlength="11" />
+            </div>
+            <div class="border radius30 mg-t-15 pd-10 flex">
+                <input type="text" id="message" class="input radius30 wd-80" placeholder="请输入短信验证码">
+                <button class="getCode wd-30 box">获取验证码</button>
+            </div>
+            <div class="border radius30 mg-t-15 pd-10">
+                <input type="password" id="password" class="input radius30" placeholder="请设置登录密码">
+            </div>
+        </div>
+        <div class="mainbtn mg-t-40 mg-15">绑定</div>
+    </div>
+
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/dlc.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script>
+        $(function () {
+
+            var phone, message, password;
+
+            // 获取验证码
+            $(".getCode").on("click", function () {
+
+                phone = $("#phone").val();
+                if (!isPhone(phone)) {
+                    dlctipbox.show("手机号码格式错误！！！");
+                    return false;
+                }
+
+                ajaxPost({
+                    api_name: 'sendCode',
+                    mobile: phone
+                }, "App/public/api/", function (res) {
+                    if (res.code == 1) {
+                        $.toast(res.msg);
+                        var time = 60;
+                        $(".getCode").attr("disabled",true);
+                        var interval = setInterval(() => {
+                            if(time > 0){
+                                $(".getCode").text(time+"秒后重新获取");
+                                time--
+                            }else{
+                                clearInterval(interval);
+                                $(".getCode").attr("disabled",false);
+                                $(".getCode").text("重新获取");
+                            }
+                        }, 1000);
+                    }
+                });
+            });
+
+            // 绑定
+            $(".mainbtn").on("click", function () {
+
+                phone = $("#phone").val();
+                message = $("#message").val();
+                password = $("#password").val();
+
+                if (isNull(message)) {
+                    dlctipbox.show("验证码不能为空！！！");
+                    return false;
+                }
+                if (isNull(password)) {
+                    dlctipbox.show("密码不能为空！！！");
+                    return false;
+                }
+
+                var param = {
+                    api_name: "bindMobile",
+                    code: message,
+                    mobile: phone,
+                    password: password,
+                    token: getItem("token"),
+                }
+
+                ajaxPost(param, "app/FanMac/api", function (res) {
+                    if (res.code == 1) {
+                        $.toast(res.msg);
+                        setTimeout(function () {
+                            goTo("././o_index.html");
+                        }, 1500)
+                    } else {
+                        dlctipbox.show(res.msg);
+                    }
+                });
+
+            });
+        });
+    </script>
+</body>
+
+</html>

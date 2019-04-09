@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        详情
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <style type="text/css">
+    .detail {
+        padding: 1.0rem 0.5rem;
+    }
+
+    img {
+        max-width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .detail_t {
+        line-height: 1.5rem;
+        /*background: #f5f5f5;*/
+    }
+
+    .xq>p {
+        margin-top: 1.0rem;
+        line-height: 1.5rem;
+        color: #666;
+    }
+    </style>
+</head>
+
+<body class="bw">
+    <div class="detail">
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="../js/dlc.js"></script>
+<script type="text/javascript">
+dlc_request('App/Online/api/', { api_name: 'details', news_id: getUrlParam('id'), token: user_token() }, function(res) {
+    console.log(res);
+    var str = ''
+    if (res.code == 1) {
+        for (i in res.data.img) {
+            str += '<p><img src="' + res.data.img[i] + '"/></p>'
+        }
+        console.log(str)
+        $('.detail').append(' <p class="title font17">' + res.data.title + '</p> <p class="title col9 mt10">' + (date('Y-m-d', res.data.ctime)) + '</p><p>' + str + '</p><p class="detail_t mt20 pl20">' + res.data.content + '</p> <div class="xq content"> </div>')
+
+    } else {
+        dlctipbox.show(res.msg)
+    }
+})
+</script>

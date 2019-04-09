@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        我的钱包
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <link href="../css/weui.min.css" rel="stylesheet" />
+    <link href="../css/dropload.css" rel="stylesheet" />
+    <link href="../css/jquery-weui.css" rel="stylesheet" />
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <style type="text/css">
+    .banner {
+        color: #fff;
+        height: 9.725rem;
+        position: relative;
+        background: url(../img/y_banner2.png);
+        -webkit-background-size: 100%;
+        background-size: 100%;
+    }
+
+    .banner>p {
+        color: #fff;
+    }
+
+    .recharge {
+        color: #fff;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 3.75rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        border: 1px solid #fff;
+        border-radius: 50px;
+        text-align: center;
+    }
+
+    .line {
+        width: 1px;
+        height: 2.0rem;
+        background: #e8e8e8;
+    }
+
+    .font18 {
+        font-size: 0.9rem;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="bigBox">
+        <ul class="container">
+            <div class="banner flex flex-column">
+                <!-- <a class="recharge" id="recharge">充值</a> //因为没有绑定设备，充值并无意义-->
+                <p class="f100 balance">
+                    <!-- 888.0 -->0</p>
+                <p>我的余额（绿蒂币）</p>
+            </div>
+            <div class="flex_sa bw ptb20">
+                <a class="flex flex-column" href="o_cupons.html">
+            <img src="../img/y_14.png" style="width: 1.25rem;height: 0.925rem" />
+            <p class="col9 mt10">我的优惠券</p>
+        </a>
+                <div class="line"></div>
+                <a class="flex flex-column" href="y_advance.html">
+            <img src="../img/y_15.png" style="width: 1.1rem;height: 1.1rem" />
+            <p class="col9 mt10">我的未付金</p>
+        </a>
+                <div class="line"></div>
+                <a class="flex flex-column" href="y_deposit.html">
+            <img src="../img/y_16.png" style="width: 1.0rem;height: 1.125rem" />
+            <p class="col9 mt10">我的押金</p>
+        </a>
+            </div>
+            <div class="lh100 plr20">消费明细</div>
+            <div class="ListBOx">
+                <ul class="main_list">
+                    <!--  <div class="flex-sb bw bdb p20">
+                <ul>
+                    <p>余额消费</p>
+                    <p class="col9 mt10">2017-01-16</p>
+                </ul>
+                <span class="color1">-120.00</span>
+            </div>
+            <div class="flex-sb bw bdb p20">
+                <ul>
+                    <p>余额消费</p>
+                    <p class="col9 mt10">2017-01-16</p>
+                </ul>
+                <span class="color1">-120.00</span>
+            </div>
+            <div class="flex-sb bw bdb p20">
+                <ul>
+                    <p>余额消费</p>
+                    <p class="col9 mt10">2017-01-16</p>
+                </ul>
+                <span class="color1">-120.00</span>
+            </div>
+            <div class="flex-sb bw bdb p20"> <ul> <p>余额消费</p> <p class="col9 mt10">2017-01-16</p> </ul> <span class="color1">-120.00</span> </div> -->
+                </ul>
+            </div>
+        </ul>
+    </div>
+    <script type="text/javascript" src="../js/sweetalert2.all.min.js"></script>
+    <script type="text/javascript" src="../js/drop/dropload.min.js"></script>
+    <script type="text/javascript" src="../js/JForm.js"></script>
+    <script type="text/javascript" src="../js/dlc.js"></script>
+    <script type="text/javascript" src="../js/jquery-weui.min.js"></script>
+    <script type="text/javascript" src="../js/city-picker.js"></script>
+    <script type="text/javascript" src="../js/h_common.js"></script>
+    <script type="text/javascript" src="../js/jquery.form.js"></script>
+    <script type="text/javascript" src="../js/o_base.js"></script>
+</body>
+<script type="text/javascript">
+// 我的余额&消费明细
+var page = 0,
+    size = 10;
+$('.ListBOx').dropload({
+    scrollArea: window,
+    domDown: {
+        domClass: 'dropload-up',
+        domRefresh: '<div class="dropload-refresh">↓下拉刷新</div>',
+        domUpdate: '<div class="dropload-update">↑释放更新</div>',
+        domLoad: '<div class="dropload-load">○加载中...</div>'
+    },
+    domDown: {
+        domClass: 'dropload-down',
+        domRefresh: '<div class="dropload-refresh">↑上拉加载更多</div>',
+        domLoad: '<div class="dropload-load"><span class="loadings"></span>加载中...</div>',
+        domNoData: '<div class="dropload-noData">暂无数据</div>'
+    },
+    loadDownFn: function(me) {
+        page++;
+        var str = '';
+        $.ajax({
+            type: 'post',
+            url: dlcUrl() + "app/user/api",
+            data: { api_name: 'myWallet', token: user_token(), page: page, pagesize: size },
+            async: false,
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('.balance').text(res.data.balance == null ? '0' : res.data.balance); //我的余额
+                var a = res.data.recharge;
+                if (res.code == 1 && a.length > 0) {
+                    for (i in a) {
+                        str += '<div class="flex-sb bw bdb p20" data-rid=' + a[i].rid + ' data-vipid=' + a[i].vipid + '> <ul> <p>' + (a[i].type == 1 ? '充值' : a[i].type == 2 ? '消费' : '违约金') + '</p> <p class="col9 mt10">' + date('Y-m-d H:i:s', a[i].ctime) + '</p> </ul> <span class="' + (a[i].money >= 0 ? 'color1' : 'color2') + ' font18">' + a[i].money + '</span> </div>';
+                    }
+                } else {
+                    me.lock();
+                    me.noData();
+                    console.log(res.msg);
+                }
+                setTimeout(function() {
+                    $('.main_list').append(str);
+                    me.resetload(); // 每次数据插入，必须重置
+                }, 1000);
+
+            },
+            error: function(err) {
+                me.resetload();
+                console.log(JSON.stringify(err));
+            }
+        })
+    }
+})
+</script>
+
+</html>

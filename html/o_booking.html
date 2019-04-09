@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <title>预约使用</title>
+</head>
+<body>
+    <div id="use">
+        <div class="line pd-10 bfff border-b flex">
+            <div class="title wd-20 lh45">使用地</div>
+            <div class="content wd-80 ta-right lh45 colbbb location">
+                <span></span>
+                <img src="../img/o_location2.png" alt="">
+            </div>
+        </div>
+        <div class="line pd-10 bfff border-b flex">
+            <div class="title wd-20 lh45">姓名</div>
+            <div class="content wd-80 ta-right lh45 colbbb">
+                <input type="text" placeholder="请输入" class="input ta-right name">
+            </div>
+        </div>
+        <div class="line pd-10 bfff border-b flex">
+            <div class="title wd-20 lh45">手机</div>
+            <div class="content wd-80 ta-right lh45 colbbb">
+                <input type="text" maxlength="11" placeholder="请输入" class="input ta-right phone" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
+            </div>
+        </div>
+        <div class="line pd-10 bfff border-b flex">
+            <div class="title wd-20 lh45">微信号</div>
+            <div class="content wd-80 ta-right lh45 colbbb">
+                <input type="text" placeholder="请输入" class="input ta-right wechat">
+            </div>
+        </div>
+        <div class="mg-20 col666 ta-center">手机和微信号二选一，填了其中一项即可</div>
+        <div class="mainbtn mg-10 mg-t-40">提交</div>
+    </div>
+    
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/o_base.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+    <script>
+        $(function () {
+
+            var UrlParam = getParam();// 返回地址参数lat/lng/address
+
+            var location = (!isNull(getItem("retunLocation"))) ? getItem("retunLocation") : "请选择";//获取使用地
+            $(".location span").text(location);
+
+            if(!isNull(getItem("retunLocation"))) $(".location img").remove();
+
+            $('.location').on("click", function () {
+                goTo("./o_map.html?type=1");
+            });
+
+            // 提交
+            $(".mainbtn").on("click", function () {
+
+                var name = $(".name").val();
+                var phone = $(".phone").val();
+                var wechat = $(".wechat").val();
+
+                if(isNull(name)){
+                    $.toast("姓名不能为空","forbidden");
+                    return false;
+                }
+                if(isNull(phone) && isNull(wechat)){
+                    $.toast("手机号或微信号不能为空","forbidden");
+                    return false;
+                }
+                if(!isNull(phone) && !isPhone(phone) ){
+                    $.toast("手机号填写有误","forbidden");
+                    return false;
+                }
+
+                var param = {
+                    api_name: "bespeakUse",
+                    token: getItem("token"),
+                    address: getItem("retunLocation"),
+                    name: name,
+                    mobile: phone,
+                    wechat: wechat,
+                    latitude: getItem("centerLat"),
+                    longitude: getItem("centerLng"),
+                }
+
+                ajaxPost(param,"app/Bespeak/api",function (res) {
+                    if(res.code == 1){
+                        $.toast("成功");
+                        setTimeout(function () {
+                            goTo("././o_mapDetail.html?type=booking");
+                        },1500)
+                    }
+                });
+
+            });
+        });
+    </script>
+</body>
+</html>

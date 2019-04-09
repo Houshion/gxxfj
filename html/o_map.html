@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../css/o_base.css">
+    <link rel="stylesheet" href="../css/o_style.css">
+    <title>使用地选择</title>
+    <style>
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <!-- 遮罩层 -->
+    <div class="mask hide"></div>
+    <!-- 风速2 -->
+    <div class="wd-80 bfff hide maskBox radius10" id="alert">
+        <div class="pd-15">
+            <div class="ta-center font16 mg-b-20">提示</div>
+            <div class="flex mg-auto colmain fontb font16 alert"></div>
+        </div>
+        <div class="border-t flex">
+            <div class="box wd-50 pd-15 border-r colbbb" onclick="hideModal($('#alert'))">取消</div>
+            <div class="box wd-50 pd-15 colmain confirm" onclick="confirm()">确认</div>
+        </div>
+    </div>
+</body>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../js/o_base.js"></script>
+<script src="../js/dlc.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script src="http://map.qq.com/api/js?v=2.exp&key=WXocean"></script>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script>
+    var geolocation = new qq.maps.Geolocation("N6RBZ-AJN35-AACI2-Q2ICF-HYV6O-JRBBZ", "myapp");
+    var map;
+
+    var positionNum = 0;
+    var options = {
+        timeout: 10000
+    };
+
+    var centerlat, centerlng;
+
+    function showPosition(position) {
+        positionNum++;
+        // position;
+        lat = position.lat;
+        lng = position.lng;
+
+        setItem("centerLat", lat);
+        setItem("centerLng", lng);
+
+        console.log(JSON.stringify(position));
+        console.log('具体地址：' + position.addr + '经度：' + lat + '纬度' + lng);
+        var center = new qq.maps.LatLng(lat, lng);
+
+        map = new qq.maps.Map(document.getElementById('container'), {
+            center: center,
+            zoom: 13,
+            draggable: true, //手势控制, 用来设置地图是否能够鼠标拖拽，默认值为“可以”；
+            scrollwheel: false, //用来配置地图是否能够通过鼠标滚轮操作进行放大，默认值为“可以”；
+            disableDoubleClickZoom: false // 用来配置地图是否可以通过鼠标双击进行放大，默认值为“可以”。
+        });
+
+        //创建marker
+        var marker = new qq.maps.Marker({
+            position: center,
+            map: map
+        });
+
+        scaleControl.setMap(null);
+
+        // 地图点击事件，获取经纬度、地址信息
+        qq.maps.event.addListener(map, 'click', function (event) {
+            var address;
+            geocoder = new qq.maps.Geocoder({
+                complete: function (result) {
+                    console.log(JSON.stringify(result));
+                    var addressResult = result.detail.address;
+                    address = result.detail.addressComponents.country + result.detail.addressComponents
+                        .province + result.detail.addressComponents.city + result.detail.addressComponents
+                        .town + result.detail.addressComponents.street + result.detail.addressComponents
+                        .streetNumber
+                    setItem("retunLocation", address);
+
+                    $(".alert").text("确认选择：" + address + "？");
+                    console.log(address);
+                    console.log(addressResult);
+                    showModal("#alert");
+                }
+            });
+
+            var coord = new qq.maps.LatLng(event.latLng.getLat(), event.latLng.getLng());
+            geocoder.getAddress(coord);
+
+            var position = {
+                "lat": event.latLng.getLat(),
+                "lng": event.latLng.getLng()
+            };
+            console.log(JSON.stringify(position))
+            setItem("centerLat", event.latLng.getLat());
+            setItem("centerLng", event.latLng.getLng());
+
+            $("#container").empty();
+
+            showPosition(position);
+
+        });
+
+        qq.maps.event.addListener(marker, 'click', function (e) {
+
+        });
+
+        centerlat = lat;
+        centerlng = lng;
+
+        anchors(map)
+    }
+
+    function anchors(map) {
+
+        var param = {
+            api_name: "bespeak_shop",
+            token: getItem("token"),
+            latitude: centerlat,
+            longitude: centerlng,
+            page: 1,
+            pagesize: 20,
+        }
+
+        ajaxPost(param, "app/Bespeak/api", function (data) {
+
+            //自定义标注图标
+            var anchor = new qq.maps.Point(55, 55),
+                size = new qq.maps.Size(110, 110),
+                origin = new qq.maps.Point(0, 0);
+            markerIcon = new qq.maps.MarkerImage(
+                "../img/y_local.png",
+                size,
+                origin,
+                anchor
+            );
+
+
+            var res = [];
+
+            var add = data.data.shop;
+
+            for (var j = 0; j < add.length; j++) {
+                res.push({
+                    'lng': add[j].lng,
+                    'lat': add[j].lat,
+                    'name': add[j].name,
+                    'mobile': add[j].mobile,
+                    'address': add[j].address
+                })
+            }
+
+            for (var i in res) {
+                var logo1 = new qq.maps.LatLng(res[i].lat, res[i].lng);
+                //创建marker
+                var logo = new qq.maps.Marker({
+                    position: logo1,
+                    map: map
+                });
+                //自定义标注图标
+                var anchor = new qq.maps.Point(48, 55.5),
+                    size = new qq.maps.Size(43, 47),
+                    origin = new qq.maps.Point(0, 0);
+                markerIcon = new qq.maps.MarkerImage(
+                    "../img/y_local.png",
+                    size,
+                    origin,
+                    anchor
+                );
+                logo.setIcon(markerIcon);
+
+                //设置属性
+                logo.name = res[i].name;
+
+                //获取标记的点击事件
+                qq.maps.event.addListener(logo, 'click', function (e) {
+                    // setItem("map_lat", res[i].lat);
+                    // setItem("map_lng", res[i].lng);
+                    // setItem("map_name", res[i].name);
+                    // setItem("map_mobile", res[i].mobile);
+                    // setItem("map_address", res[i].address);                  
+
+                    setItem("message", JSON.stringify(res[i]))
+
+                    // location.href="./o_mapDetail.html?lat='"+res[i].lat+"'&lng='"+res[i].lng+"'&name='"+res[i].name+"'&mobile='"+res[i].mobile+"'&address='"+res[i].address+"'";
+                    // location.href="./o_mapDetail.html?message="+res[i];
+                    location.href = "./o_mapDetail.html";
+                });
+
+            }
+        });
+
+
+    }
+
+    function showErr() {
+        positionNum++;
+        console.log('定位失败！');
+    };
+
+    geolocation.getLocation(showPosition, showErr, options);
+
+    function confirm() {
+        if (getParam().type == 1) {
+            location.href = './o_booking.html'
+        } else {
+            location.href = './o_return.html?num=' + getParam().num
+        }
+
+    }
+</script>
+
+</html>

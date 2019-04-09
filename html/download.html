@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>下载APP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+</body>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script>
+    var u = navigator.userAgent;
+    if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+        //安卓手机
+        location.href = "http://m.pp.cn/detail.html?appid=7908926&ch_src=pp_dev&ch=default"
+    } else if (u.indexOf('iPhone') > -1) {
+        //苹果手机
+        location.href = "https://itunes.apple.com/cn/app/workflow-powerful-automation/id1446721378?mt=8"
+    } else if (u.indexOf('Windows Phone') > -1) {
+        alert("暂不支持该类型设备")
+    }
+</script>
+
+</html>

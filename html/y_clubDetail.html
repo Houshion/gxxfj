@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        详情
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <style type="text/css">
+    .list {
+        padding: 0.5rem;
+    }
+
+    .content img {
+        margin: .6rem 0;
+        max-width: 100%;
+    }
+    </style>
+</head>
+
+<body class="bw">
+    <div class="list">
+        <!-- <img class="pic" src="../img/y_banner3.png" style="width: 100%"/> <p class="ti2 mt20">多方位室内空气检测系统只要 <span class="color1">2399元</span></p> -->
+    </div>
+    <div class="mt20 p20">
+        <p>
+            <!-- 内容详情 -->
+        </p>
+        <p class="col6 mt20 lh70 content">
+            <!-- 新风机是一种有效的空气净化设备，能够使室内空气产生循环，一方面把室内污浊的空气排出室外，另一方面把室外新鲜的空气经过杀菌，消毒、过滤等措施后，再输入到室内，让房间里每时每刻都是新鲜干净的空气，新风机运用新风对流专利技术，通过自主送风何引风，使室内空气实现对流，从而最大程度化的进行室内空气置换，新风机内置多功能净化系统保证进入室内的空气洁净健康。新风机主要分为排风式新风机和送风式新风机两种类型，可以在绝大部分室内环境下安装，安装方便，使用舒适。新风机是家居生活的健康伴侣。 -->
+        </p>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript" src="../js/dlc.js"></script>
+<script type="text/javascript">
+$('.list').on('click', function() {
+    location.href = "y_clubDetail.html"
+})
+dlc_request('App/Online/api/', { api_name: 'club_details', token: user_token(), club_id: getUrlParam('id') }, function(res) {
+    console.log(res);
+    if (res.code == 1) {
+        $('.list').append('<img class="pic" src="' + res.data.pic + '" style="width: 100%"/> <p class="ti2 mt20">' + res.data.title + '</span>');
+        $('.content').html(escape2Html(res.data.content));
+    } else {
+        dlctipbox.show(res.msg)
+    }
+})
+</script>

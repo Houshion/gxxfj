@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>
+        个人中心
+    </title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="webkit" name="renderer">
+    <meta content="no-siteapp" http-equiv="Cache-Control" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,address=no" name="format-detection" />
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../css/y_common.css" rel="stylesheet" />
+    <link href="../css/weui.min.css" rel="stylesheet" />
+    <link href="../css/jquery-weui.css" rel="stylesheet" />
+    <link href="../css/swiper.min.css" rel="stylesheet" />
+    <script src="../js/adaptive.js" type="text/javascript"></script>
+    <script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="../js/dlc.js" type="text/javascript"></script>
+    <style type="text/css">
+    body {
+        background: #f5f5f5;
+    }
+
+    .banner {
+        height: 9.5rem;
+        display: flex;
+        background: url(../img/y_banner.png) no-repeat;
+    }
+
+    .list {
+        height: 2.5rem;
+        line-height: 2.5rem;
+        padding: 0 0.5rem;
+        background: #fff;
+    }
+
+    .colr {
+        color: red;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- banner -->
+    <ul class="banner flex flex-column" onclick="javascript:location.href='y_info.html'">
+        <img class="pic" style="width:3.35rem;height:3.35rem;border-radius: 50%" />
+        <p class="colw mt30 nickname">
+            <!-- OK先生 -->
+        </p>
+        <p class="colw phone">
+            <!-- 15816834441 -->
+        </p>
+    </ul>
+    <!-- 列表部分 -->
+    <div class="list flex-sb bdb" onclick="javascript:location.href='y_wallet.html'">
+        <ul class="left_box flex_a">
+            <img src="../img/y_10.png" style="width: 1.25rem;height: 1.25rem" />
+            <span class="ml20">我的钱包</span>
+        </ul>
+        <img src="../img/y_arrow_right.png" style="width:0.3rem;height:0.55rem;" />
+    </div>
+    <div class="list flex-sb bdb" onclick="javascript:location.href='o_redpack.html'">
+        <ul class="left_box flex_a">
+            <img src="../img/y_11.png" style="width: 1.25rem;height: 1.25rem" />
+            <span class="ml20">我的红包</span>
+        </ul>
+        <div class="flex">
+            <span class="mr20 vip_deadline"><!-- 未开通 --></span>
+            <img src="../img/y_arrow_right.png" style="width:0.3rem;height:0.55rem;" />
+        </div>
+    </div>
+    <div class="list flex-sb bdb" onclick="javascript:location.href='y_mdevice.html'">
+        <ul class="left_box flex_a">
+            <img src="../img/y_12.png" style="width: 1.25rem;height: 1.25rem" />
+            <span class="ml20">我的设备</span>
+        </ul>
+        <div class="flex">
+            <img src="../img/y_arrow_right.png" style="width:0.3rem;height:0.55rem;" />
+        </div>
+    </div>
+    <div class="list flex-sb bdb" onclick="javascript:location.href='y_club.html'">
+        <ul class="left_box flex_a">
+            <img src="../img/y_13.png" style="width: 1.25rem;height: 1.25rem" />
+            <span class="ml20">绿蒂俱乐部</span>
+        </ul>
+        <div class="flex">
+            <img src="../img/y_arrow_right.png" style="width:0.3rem;height:0.55rem;" />
+        </div>
+    </div>
+    <div class="list flex-sb bdb" onclick="javascript:location.href='y_mMessage.html'">
+        <ul class="left_box flex_a">
+            <img src="../img/tongzhi03.png" style="width: 1.25rem;height: 1.25rem;" />
+            <span class="ml20">消息中心</span>
+        </ul>
+        <div class="flex pos_r">
+            
+            <!-- <i class="mr20 Msg col9"></i> -->
+            <img src="../img/y_arrow_right.png" style="width:0.3rem;height:0.55rem;" />
+        </div>
+    </div>
+    <script src="../js/dlc.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-weui.min.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>
+<script type="text/javascript">
+// 登录
+isLogin(function(res) {
+    console.log(res);
+    if (res.flag == 1) { //登录成功
+        user();
+        console.log('登录成功')
+    } else {
+        dlctipbox.show(res.msg);
+    }
+});
+addEventback();
+
+function user() {
+    if (user_token()) {
+        // 获取个人中心的信息
+        dlc_request('app/user/api', { api_name: 'userData', token: user_token() }, function(res) {
+            console.log(res);
+            if (res.code == 1) {
+                $('.pic').attr('src', res.data.headimg);
+                $('.nickname').text(res.data.nickname);
+            } else {
+                dlctipbox.show(res.msg);
+            }
+        })
+    }
+}
+dlc_request('App/Online/api/', { api_name: 'system_num', token: user_token() }, function(res) {
+    console.log(res);
+    if (res.code == 1) {
+        console.log(res.data)
+        if (res.data) {
+            $(".pos_r").prepend('<span class="weui-badge Msg" style="position: absolute;top: -.4em;right: 1em;">'+res.data+'</span>');
+        }
+    } else {
+        dlctipbox.show(res.msg);
+    }
+})
+</script>
